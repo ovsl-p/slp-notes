@@ -2,8 +2,11 @@
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/cache
-.obsidian/plugins/obsidian-git/data.json
 .trash/
+
+# 端末ごと（有効なプラグイン一覧・プラグインの認証情報）
+.obsidian/community-plugins.json
+.obsidian/plugins/obsidian-git/data.json
 
 # OS
 .DS_Store
