@@ -23,8 +23,8 @@
 
 ## この vault の使い方
 
-- 1トピック = 1ファイル。`domain/slug.md`（例: `programming/rust-memory-management.md`）。
-- 日本語タイトルは front matter の `aliases` に入れてあるので、`[[Rust のメモリ管理]]` でリンクできる。
+- 1トピック = 1ファイル。**ファイル名は H1 のタイトルと同じ**（例: `programming/Rust のメモリ管理.md`）。日本語のままでOK。ただし `/ : * ? " < > |` は使わない。
+- 日本語タイトルは front matter の `title` と `aliases` にも入れてあるので、`[[Rust のメモリ管理]]` はファイル名でそのまま解決する。
 - Hermes への依頼例:
   - 「WebSocket の仕組みについて、必要な前提知識込みでまとめて」
   - 「サンプリング定理を音声処理の文脈でメモして」
