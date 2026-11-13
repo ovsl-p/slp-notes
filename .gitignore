@@ -1,0 +1,10 @@
+# Obsidian（端末ごとに変わるものは共有しない）
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/plugins/obsidian-git/data.json
+.trash/
+
+# OS
+.DS_Store
+Thumbs.db
