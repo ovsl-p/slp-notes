@@ -70,6 +70,6 @@
 <line x1="80" y1="397.0" x2="735" y2="397.0" stroke="#d62728" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
 <text x="410" y="392.0" font-size="10" fill="#d62728">IIR: -60 dB at 53 samples (1.1 ms)</text>
 <text x="94" y="365.5" font-size="10" fill="#1f77b4">FIR: ends at 257 taps</text>
-<line x1="90" y1="466" x2="122" y2="466" stroke="#1f77b4" stroke-width="2.2"/><text x="128" y="470" font-size="11.5" fill="#222">FIR: 257 taps, symmetric → 群遅延 128 samples (2.67 ms) で全帯域一定</text>
-<line x1="90" y1="484" x2="122" y2="484" stroke="#d62728" stroke-width="2.2"/><text x="128" y="488" font-size="11.5" fill="#222">IIR: インパルス応答は無限。群遅延は 7.1 samples @DC で周波数依存</text>
+<line x1="90" y1="466" x2="122" y2="466" stroke="#1f77b4" stroke-width="2.2"/><text x="128" y="470" font-size="11.5" fill="#222">FIR: 257 taps, symmetric &#8594; group delay 128 samples (2.67 ms), constant over frequency</text>
+<line x1="90" y1="484" x2="122" y2="484" stroke="#d62728" stroke-width="2.2"/><text x="128" y="488" font-size="11.5" fill="#222">IIR: infinite impulse response; group delay 7.1 samples @DC, frequency dependent</text>
 </svg>
