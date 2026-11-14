@@ -108,7 +108,7 @@ Pod の IP は変わるので、変わらない入口が必要になる。それ
 
 Service はラベルセレクタで Pod を選ぶ。IP ではなくラベルで結びつくので、Pod が入れ替わっても追従する。内部 DNS では `my-svc.my-namespace.svc.cluster.local` のように引ける。
 
-Ingress は HTTP のルーティングで、パスやホスト名で振り分ける。ただし Ingress リソース自体は設定の宣言にすぎず、実際に動かすには Ingress controller（nginx、Traefik、AWS Load Balancer Controller など）が別途必要になる。
+Ingress は HTTP のルーティングで、パスやホスト名で振り分ける。ただし Ingress リソース自体は設定の宣言にすぎず、実際に動かすには Ingress controller（Traefik、AWS Load Balancer Controller、F5 の NGINX Ingress Controller など）が別途必要になる。コミュニティ版の ingress-nginx は2026年3月で保守が終了しており、新規に選ぶなら Gateway API か上記の実装が候補になる。
 
 ### 6. 設定と秘密
 
