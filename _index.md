@@ -10,6 +10,7 @@
 ## web
 
 - [[WebSocket の仕組み]] — ハンドシェイク、フレーム形式、マスキング、ping/pong、スケーリングと落とし穴
+- [[Kubernetes の概要]] — 宣言的制御ループ、Pod/Deployment/Service、リソースとヘルスチェック
 
 ## math
 
