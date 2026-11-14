@@ -12,6 +12,7 @@
 
 - [[WebSocket の仕組み]] — ハンドシェイク、フレーム形式、マスキング、ping/pong、スケーリングと落とし穴
 - [[Kubernetes の概要]] — 宣言的制御ループ、Pod/Deployment/Service、リソースとヘルスチェック
+- AWS（web/aws/）: [[AWS の VPC とネットワークの基礎]] / [[AWS の DNS と名前解決]] / [[AWS のつなぎ方の選択]] / [[AWS のロードバランサの使い分け]] / [[AWS のマルチアカウントのガバナンス]]
 
 ## math
 

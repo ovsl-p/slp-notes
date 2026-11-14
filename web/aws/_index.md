@@ -1,0 +1,9 @@
+# AWS（SAP-C03 の勉強から出てきた仕組み）
+
+試験対策の判断は別リポジトリ（AWS-SAP）に置き、ここには**仕組みの理解**だけを書く。
+
+- [[AWS の VPC とネットワークの基礎]] — サブネット、ルートテーブル、NAT、エンドポイント、SG と NACL
+- [[AWS の DNS と名前解決]] — Route 53 Resolver、プライベートホストゾーン、転送の向き
+- [[AWS のつなぎ方の選択]] — ピアリング、Transit Gateway、Direct Connect、VPN、PrivateLink
+- [[AWS のロードバランサの使い分け]] — ALB、NLB、GWLB の層と用途
+- [[AWS のマルチアカウントのガバナンス]] — Organizations、SCP、Control Tower、Identity Center
