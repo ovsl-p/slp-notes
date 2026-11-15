@@ -12,8 +12,8 @@
 <line x1="164" y1="152" x2="164" y2="194" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
 <text x="174" y="178" font-size="11" fill="#5b6b7b" text-anchor="start">はい</text>
 <rect x="64" y="194" width="200" height="48" rx="4" fill="#eef4fa" stroke="#8fb0cc" stroke-width="1.2"/>
-<text x="164" y="216" font-size="11.5" fill="#1f3b52" text-anchor="middle">VPC が3つ以上になる？</text>
-<text x="164" y="234" font-size="10.5" fill="#4a6b80" text-anchor="middle">集約が要るかどうか</text>
+<text x="164" y="216" font-size="11.5" fill="#1f3b52" text-anchor="middle">VPC が4つ以上になる？</text>
+<text x="164" y="234" font-size="10.5" fill="#4a6b80" text-anchor="middle">3つまでは全結合で足りる</text>
 <text x="276" y="212" font-size="11" fill="#5b6b7b" text-anchor="start">いいえ</text>
 <text x="276" y="230" font-size="11" fill="#5b6b7b" text-anchor="start">→ ピアリング</text>
 <line x1="164" y1="242" x2="164" y2="284" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
@@ -61,5 +61,5 @@
 <text x="460" y="384" font-size="11" fill="#5a5a5a" text-anchor="start">CIDR が重複していても使える。VPC Lattice は L7。</text>
 <text x="460" y="420" font-size="11.5" fill="#1f3b52" text-anchor="start">「どの手段か」より「経路かサービスか」で先に分ける。</text>
 <text x="40" y="500" font-size="12" fill="#333" text-anchor="start">分離はセキュリティグループではなく経路で切る。経路で切れば、なぜ届かないかを説明できる。</text>
-<text x="40" y="526" font-size="12" fill="#333" text-anchor="start">ピアリングは1対1で推移的にならない。A-B、B-C とつないでも A から C へは通らない。</text>
+<text x="40" y="526" font-size="12" fill="#333" text-anchor="start">ピアリングは推移的でないので全結合になる。3個で3本、5個で10本、10個で45本と増える。</text>
 </svg>
