@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="672" viewBox="0 0 900 672" font-family="Noto Sans JP,Helvetica,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="690" viewBox="0 0 900 690" font-family="Noto Sans JP,Helvetica,sans-serif">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7b"/></marker></defs>
-<rect width="900" height="672" fill="#fdfdfb"/>
+<rect width="900" height="690" fill="#fdfdfb"/>
 <text x="40" y="36" font-size="15.5" fill="#111" text-anchor="start">VPC の中身 — サブネットは AZ に属し、外に出られるかはルートテーブルで決まる</text>
 <rect x="360" y="78" width="180" height="42" rx="21" fill="#f1f4f7" stroke="#9aa7b4" stroke-width="1.2"/>
 <text x="450" y="104" font-size="13" fill="#111" text-anchor="middle">インターネット</text>
 <rect x="362" y="146" width="176" height="38" rx="4" fill="#ffffff" stroke="#4a5a6a" stroke-width="1.2"/>
 <text x="450" y="171" font-size="12" fill="#111" text-anchor="middle">インターネットゲートウェイ</text>
-<line x1="450" y1="120" x2="450" y2="146" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<text x="548" y="160" font-size="10.5" fill="#6b7a88" text-anchor="start">VPC の境界に付く部品</text>
 <rect x="60" y="206" width="780" height="368" rx="6" fill="#fbfcfd" stroke="#b8c4cf" stroke-width="1.2" stroke-dasharray="5 4"/>
 <text x="76" y="229" font-size="13" fill="#444" text-anchor="start">VPC 10.0.0.0/16</text>
 <rect x="88" y="246" width="352" height="312" rx="5" fill="#ffffff" stroke="#d5dde4" stroke-width="1.2"/>
@@ -15,7 +15,7 @@
 <text x="116" y="301" font-size="12" fill="#1f3b52" text-anchor="start">パブリックサブネット 10.0.1.0/24</text>
 <rect x="116" y="318" width="120" height="38" rx="4" fill="#ffffff" stroke="#7d93a8" stroke-width="1.2"/>
 <text x="176" y="343" font-size="11.5" fill="#111" text-anchor="middle">NAT ゲートウェイ</text>
-<text x="248" y="343" font-size="11" fill="#6b7a88" text-anchor="start">外向きの出口</text>
+<text x="248" y="343" font-size="11" fill="#6b7a88" text-anchor="start">送信元 IP を付け替える</text>
 <rect x="104" y="410" width="320" height="132" rx="4" fill="#f7f4fb" stroke="#b6a7cf" stroke-width="1.2"/>
 <text x="116" y="430" font-size="12" fill="#3c2f52" text-anchor="start">プライベートサブネット 10.0.11.0/24</text>
 <text x="116" y="456" font-size="11.5" fill="#3c3c3c" text-anchor="start">ルート: 0.0.0.0/0 → NAT ゲートウェイ</text>
@@ -25,14 +25,15 @@
 <text x="308" y="490" font-size="11.5" fill="#111" text-anchor="middle">RDS</text>
 <text x="116" y="524" font-size="11" fill="#5a5a5a" text-anchor="start">外から直接は届かない</text>
 <line x1="176" y1="468" x2="176" y2="356" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
-<text x="184" y="412" font-size="10.5" fill="#5b6b7b" text-anchor="start">外向き</text>
+<text x="184" y="402" font-size="10.5" fill="#5b6b7b" text-anchor="start">外向き</text>
+<line x1="176" y1="318" x2="176" y2="222" stroke="#5b6b7b" stroke-width="1.4"/>
 <rect x="460" y="246" width="352" height="312" rx="5" fill="#ffffff" stroke="#d5dde4" stroke-width="1.2"/>
 <text x="472" y="268" font-size="12" fill="#555" text-anchor="start">AZ c（アベイラビリティゾーン）</text>
 <rect x="476" y="282" width="320" height="104" rx="4" fill="#edf3f9" stroke="#8fb0cc" stroke-width="1.2"/>
 <text x="488" y="301" font-size="12" fill="#1f3b52" text-anchor="start">パブリックサブネット 10.0.2.0/24</text>
 <rect x="488" y="318" width="120" height="38" rx="4" fill="#ffffff" stroke="#7d93a8" stroke-width="1.2"/>
 <text x="548" y="343" font-size="11.5" fill="#111" text-anchor="middle">NAT ゲートウェイ</text>
-<text x="620" y="343" font-size="11" fill="#6b7a88" text-anchor="start">外向きの出口</text>
+<text x="620" y="343" font-size="11" fill="#6b7a88" text-anchor="start">送信元 IP を付け替える</text>
 <rect x="476" y="410" width="320" height="132" rx="4" fill="#f7f4fb" stroke="#b6a7cf" stroke-width="1.2"/>
 <text x="488" y="430" font-size="12" fill="#3c2f52" text-anchor="start">プライベートサブネット 10.0.12.0/24</text>
 <text x="488" y="456" font-size="11.5" fill="#3c3c3c" text-anchor="start">ルート: 0.0.0.0/0 → NAT ゲートウェイ</text>
@@ -42,9 +43,13 @@
 <text x="680" y="490" font-size="11.5" fill="#111" text-anchor="middle">RDS</text>
 <text x="488" y="524" font-size="11" fill="#5a5a5a" text-anchor="start">外から直接は届かない</text>
 <line x1="548" y1="468" x2="548" y2="356" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
-<text x="556" y="412" font-size="10.5" fill="#5b6b7b" text-anchor="start">外向き</text>
-<polyline points="450,184 450,222 176,222 176,318" fill="none" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
-<polyline points="450,222 548,222 548,318" fill="none" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<text x="556" y="402" font-size="10.5" fill="#5b6b7b" text-anchor="start">外向き</text>
+<line x1="548" y1="318" x2="548" y2="222" stroke="#5b6b7b" stroke-width="1.4"/>
+<line x1="176" y1="222" x2="548" y2="222" stroke="#5b6b7b" stroke-width="1.4"/>
+<line x1="450" y1="222" x2="450" y2="184" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<line x1="450" y1="146" x2="450" y2="120" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<text x="450" y="214" font-size="11" fill="#5b6b7b" text-anchor="middle">外向きは NAT → IGW → インターネットの順に抜ける</text>
 <text x="60" y="608" font-size="12" fill="#333" text-anchor="start">パブリックかどうかは名前ではなく、ルートテーブルに IGW への経路があるかで決まる。</text>
 <text x="60" y="634" font-size="12" fill="#333" text-anchor="start">NAT ゲートウェイは AZ ごとに置く。1つだけだとその AZ の障害で他の AZ の外向き通信も止まる。</text>
+<text x="60" y="660" font-size="12" fill="#333" text-anchor="start">IGW は AZ を持たない論理コンポーネントで、冗長化は AWS 側。NAT は AZ に属する実リソース。</text>
 </svg>
