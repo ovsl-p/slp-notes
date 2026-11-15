@@ -1,25 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="460" viewBox="0 0 900 460" font-family="Noto Sans JP,Helvetica,sans-serif">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7b"/></marker></defs>
-<rect width="900" height="560" fill="#fdfdfb"/>
-<text x="40" y="36" font-size="15.5" fill="#111" text-anchor="start">権限の判定 — 拒否が最優先、許可は足し算、書いていないことは拒否</text>
+<rect width="900" height="460" fill="#fdfdfb"/>
+<text x="40" y="36" font-size="15.5" fill="#111" text-anchor="start">権限の判定 — 拒否が最優先、上限は掛け算、書いていないことは拒否</text>
 <rect x="40" y="64" width="420" height="300" rx="6" fill="#ffffff" stroke="#dbe3ea" stroke-width="1.2"/>
 <text x="56" y="88" font-size="13" fill="#1f3b52" text-anchor="start">① 1つのリクエストの判定順</text>
-<rect x="96" y="104" width="230" height="46" rx="4" fill="#fdf1f1" stroke="#d09a9a" stroke-width="1.2"/>
-<text x="211" y="124" font-size="11.5" fill="#5a2626" text-anchor="middle">明示的な拒否（Deny）があるか</text>
-<text x="211" y="142" font-size="10.5" fill="#7a5a5a" text-anchor="middle">組織の SCP・バケットポリシー・境界</text>
-<rect x="96" y="192" width="230" height="46" rx="4" fill="#eef6ef" stroke="#93b89a" stroke-width="1.2"/>
-<text x="211" y="212" font-size="11.5" fill="#24502c" text-anchor="middle">明示的な許可（Allow）があるか</text>
-<text x="211" y="230" font-size="10.5" fill="#4a6b4e" text-anchor="middle">アイデンティティ／リソース／境界の内側</text>
-<rect x="96" y="280" width="230" height="46" rx="4" fill="#f4f4f4" stroke="#b0b0b0" stroke-width="1.2"/>
-<text x="211" y="300" font-size="11.5" fill="#333" text-anchor="middle">どちらも無ければ拒否（暗黙の拒否）</text>
-<text x="211" y="318" font-size="10.5" fill="#666" text-anchor="middle">ここが既定値</text>
-<line x1="211" y1="150" x2="211" y2="192" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
-<text x="222" y="175" font-size="10.5" fill="#5b6b7b" text-anchor="start">無ければ</text>
-<line x1="211" y1="238" x2="211" y2="280" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
-<text x="222" y="263" font-size="10.5" fill="#5b6b7b" text-anchor="start">無ければ</text>
-<text x="336" y="132" font-size="11" fill="#8a3b3b" text-anchor="start">あれば即・拒否</text>
-<text x="336" y="220" font-size="11" fill="#2f6b38" text-anchor="start">あれば許可</text>
-<text x="56" y="348" font-size="11" fill="#5a5a5a" text-anchor="start">許可を足しても効かないときは、拒否がどこかで効いている。</text>
+<rect x="96" y="100" width="230" height="42" rx="4" fill="#fdf1f1" stroke="#d09a9a" stroke-width="1.2"/>
+<text x="211" y="117" font-size="11.5" fill="#5a2626" text-anchor="middle">明示的な拒否（Deny）があるか</text>
+<text x="211" y="134" font-size="10" fill="#7a5a5a" text-anchor="middle">バケットポリシー・キーポリシーの Deny</text>
+<rect x="96" y="166" width="230" height="42" rx="4" fill="#fdf8ec" stroke="#d6b878" stroke-width="1.2"/>
+<text x="211" y="183" font-size="11.5" fill="#5a4415" text-anchor="middle">上限のすべてを通っているか</text>
+<text x="211" y="200" font-size="10" fill="#7a6534" text-anchor="middle">SCP・RCP・境界・セッション</text>
+<rect x="96" y="232" width="230" height="42" rx="4" fill="#eef6ef" stroke="#93b89a" stroke-width="1.2"/>
+<text x="211" y="249" font-size="11.5" fill="#24502c" text-anchor="middle">アイデンティティかリソースで Allow？</text>
+<text x="211" y="266" font-size="10" fill="#4a6b4e" text-anchor="middle">どちらか片方で足りる（足し算）</text>
+<rect x="96" y="298" width="230" height="42" rx="4" fill="#f4f4f4" stroke="#b0b0b0" stroke-width="1.2"/>
+<text x="211" y="315" font-size="11.5" fill="#333" text-anchor="middle">どれかで欠ければ拒否</text>
+<text x="211" y="332" font-size="10" fill="#666" text-anchor="middle">暗黙の拒否。ここが既定値</text>
+<line x1="211" y1="142" x2="211" y2="166" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<line x1="211" y1="208" x2="211" y2="232" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<line x1="211" y1="274" x2="211" y2="298" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<text x="222" y="157" font-size="10" fill="#5b6b7b" text-anchor="start">無ければ</text>
+<text x="222" y="223" font-size="10" fill="#5b6b7b" text-anchor="start">通れば</text>
+<text x="222" y="289" font-size="10" fill="#5b6b7b" text-anchor="start">無ければ</text>
+<text x="336" y="125" font-size="10.5" fill="#8a3b3b" text-anchor="start">あれば即・拒否</text>
+<text x="336" y="191" font-size="10.5" fill="#8a6a1f" text-anchor="start">外れれば拒否</text>
+<text x="336" y="257" font-size="10.5" fill="#2f6b38" text-anchor="start">あれば許可</text>
+<text x="56" y="354" font-size="10.5" fill="#5a5a5a" text-anchor="start">拒否と上限は別物。上限の外れは暗黙の拒否として現れる。</text>
 <rect x="480" y="64" width="380" height="300" rx="6" fill="#ffffff" stroke="#dbe3ea" stroke-width="1.2"/>
 <text x="496" y="88" font-size="13" fill="#1f3b52" text-anchor="start">② アカウントをまたぐとき</text>
 <rect x="500" y="104" width="150" height="86" rx="4" fill="#fbfcfd" stroke="#b8c4cf" stroke-width="1.2"/>
@@ -35,8 +41,8 @@
 <line x1="575" y1="190" x2="630" y2="232" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
 <line x1="755" y1="190" x2="700" y2="232" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
 <text x="496" y="296" font-size="11" fill="#5a5a5a" text-anchor="start">片方だけでは通らない。暗号化されていれば</text>
-<text x="496" y="314" font-size="11" fill="#5a5a5a" text-anchor="start">KMS のキーポリシーにも許可が要る。</text>
-<text x="496" y="332" font-size="11" fill="#5a5a5a" text-anchor="start">SCP も呼び出し元とリソース側の両方に効く。</text>
-<text x="40" y="404" font-size="12" fill="#333" text-anchor="start">許可は足し算、拒否だけが引き算。403 が出たら、まず Deny を探してから許可を足す。</text>
-<text x="40" y="430" font-size="12" fill="#333" text-anchor="start">SCP・権限の境界・セッションポリシーは、どれも「許可しない、上限を下げるだけ」で共通している。</text>
+<text x="496" y="314" font-size="11" fill="#5a5a5a" text-anchor="start">KMS はキーポリシーと自分の IAM ポリシーの両方が要る。</text>
+<text x="496" y="332" font-size="11" fill="#5a5a5a" text-anchor="start">SCP は呼び出し元のアカウントにだけ効く（リソース側は RCP）。</text>
+<text x="40" y="404" font-size="12" fill="#333" text-anchor="start">403 が出たら、まず明示的な Deny を探し、次に上限のどこで外れたかを見る。</text>
+<text x="40" y="430" font-size="12" fill="#333" text-anchor="start">SCP・RCP・境界・セッションポリシーは、どれも「許可しない、上限を下げるだけ」で共通している。</text>
 </svg>
