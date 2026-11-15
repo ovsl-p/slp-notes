@@ -4,6 +4,7 @@ Oversleep の学習メモ（Obsidian vault）。Rust / web / 数学 / サウン�
 
 - `_index.md` — 目次（MOC）。新しいノートを足したらここにも追記する
 - `_templates/study-note.md` — ノートの雛形
+- `CLAUDE.md` — 書くとき・直すときのチェックリスト（コミット前に確認）
 - `programming/` `web/` `math/` `sound-design/` — ドメイン別
 - `assets/<domain>/` — 画像・音源などの添付（ノート本文とは分ける）
 
