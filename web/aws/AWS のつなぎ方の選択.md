@@ -37,6 +37,10 @@ VPC が増えるほど、経路の管理が破綻する。どの手段を選ぶ�
 
 ## 本体の解説
 
+判断の順番を1枚に。経路を流すか、サービスだけ見せるかで先に分かれる。
+
+![[assets/web/aws-connectivity-choice.svg]]
+
 ### 1. 2つの軸
 
 1つ目の軸は、経路を流すか、サービスだけ見せるか。ピアリング・Transit Gateway・Direct Connect・VPN は、お互いのネットワークに経路を通す（L3 でつなぐ）。PrivateLink と VPC Lattice は、相手にネットワーク全体は見せず、特定のサービスだけを公開する。
