@@ -7,3 +7,4 @@
 - [[AWS のつなぎ方の選択]] — ピアリング、Transit Gateway、Direct Connect、VPN、PrivateLink
 - [[AWS のロードバランサの使い分け]] — ALB、NLB、GWLB の層と用途
 - [[AWS のマルチアカウントのガバナンス]] — Organizations、SCP、Control Tower、Identity Center
+- [[AWS の IAM と権限の仕組み]] — ポリシーの評価順、ロールと AssumeRole、境界・SCP・セッション、クロスアカウント
