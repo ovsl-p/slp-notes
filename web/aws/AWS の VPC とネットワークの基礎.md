@@ -7,7 +7,7 @@ created: 2026-11-14
 updated: 2026-11-15
 status: growing
 prerequisites: [IP アドレスと CIDR, ルーティングの基礎, NAT の考え方, DNS の基礎]
-related: ["[[AWS の DNS と名前解決]]", "[[AWS のつなぎ方の選択]]", "[[Kubernetes の概要]]"]
+related: ["[[VPC の前提知識]]", "[[AWS の DNS と名前解決]]", "[[AWS のつなぎ方の選択]]", "[[Kubernetes の概要]]"]
 sources:
   - Amazon VPC ユーザーガイド（https://docs.aws.amazon.com/vpc/latest/userguide/）
   - AWS Well-Architected フレームワーク（信頼性・セキュリティの柱）
@@ -26,6 +26,8 @@ AWS の設計問題は、ほぼ全部ネットワークの上で起きる。サ�
 コンテナや Kubernetes を使う場合も、EKS（標準の VPC CNI）では Pod に VPC の IP がそのまま振られるので、ここが曖昧だと Service や Ingress の話が呑み込めない。
 
 ## 前提となる知識
+
+IP アドレスと CIDR、ルーティング、NAT、DNS の基礎は [[VPC の前提知識]] にまとめた。ここでは先にそちらを読んでおく前提で書いている。
 
 | 知っておくこと | なぜ必要か |
 | --- | --- |
