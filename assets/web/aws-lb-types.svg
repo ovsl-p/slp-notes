@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" font-family="Noto Sans JP,Helvetica,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7b"/></marker></defs>
+<rect width="900" height="480" fill="#fdfdfb"/>
+<text x="40" y="36" font-size="15.5" fill="#111" text-anchor="start">ロードバランサの3種類 — どこまで中身を見るかで、できることが変わる</text>
+<rect x="40" y="64" width="260" height="42" rx="4" fill="#eef4fa" stroke="#8fb0cc" stroke-width="1.2"/>
+<text x="54" y="92" font-size="14" fill="#1f2b36" text-anchor="start">ALB</text>
+<text x="190" y="92" font-size="11.5" fill="#4a5a6a" text-anchor="start">L7（HTTP/HTTPS）</text>
+<rect x="40" y="106" width="260" height="132" rx="4" fill="#ffffff" stroke="#8fb0cc" stroke-width="1.2"/>
+<text x="54" y="132" font-size="11" fill="#333" text-anchor="start">・パス・ホスト名で振り分け</text>
+<text x="54" y="158" font-size="11" fill="#333" text-anchor="start">・WAF・認証・固定レスポンス</text>
+<text x="54" y="184" font-size="11" fill="#333" text-anchor="start">・TLS を終端する</text>
+<rect x="320" y="64" width="260" height="42" rx="4" fill="#f2f7f2" stroke="#9bbf9f" stroke-width="1.2"/>
+<text x="334" y="92" font-size="14" fill="#1f2b36" text-anchor="start">NLB</text>
+<text x="470" y="92" font-size="11.5" fill="#4a5a6a" text-anchor="start">L4（TCP/UDP）</text>
+<rect x="320" y="106" width="260" height="132" rx="4" fill="#ffffff" stroke="#9bbf9f" stroke-width="1.2"/>
+<text x="334" y="132" font-size="11" fill="#333" text-anchor="start">・超低遅延、UDP も通す</text>
+<text x="334" y="158" font-size="11" fill="#333" text-anchor="start">・AZ ごとに固定 IP（EIP 可）</text>
+<text x="334" y="184" font-size="11" fill="#333" text-anchor="start">・PrivateLink の前段</text>
+<rect x="600" y="64" width="260" height="42" rx="4" fill="#f7f4fa" stroke="#b6a7cf" stroke-width="1.2"/>
+<text x="614" y="92" font-size="14" fill="#1f2b36" text-anchor="start">GWLB</text>
+<text x="750" y="92" font-size="11.5" fill="#4a5a6a" text-anchor="start">L3（IP パケット）</text>
+<rect x="600" y="106" width="260" height="132" rx="4" fill="#ffffff" stroke="#b6a7cf" stroke-width="1.2"/>
+<text x="614" y="132" font-size="11" fill="#333" text-anchor="start">・通信を機器に透過的に通す</text>
+<text x="614" y="158" font-size="11" fill="#333" text-anchor="start">・GENEVE（UDP 6081）で包む</text>
+<text x="614" y="184" font-size="11" fill="#333" text-anchor="start">・既存アプライアンスの活用</text>
+<text x="40" y="272" font-size="12" fill="#333" text-anchor="start">HTTP の中身で振り分けたい → ALB ／ 固定 IP・UDP・低遅延 → NLB ／ 機器に通したい → GWLB</text>
+<rect x="40" y="300" width="800" height="120" rx="6" fill="#ffffff" stroke="#dbe3ea" stroke-width="1.2"/>
+<text x="56" y="324" font-size="12.5" fill="#1f3b52" text-anchor="start">GWLB で検査する流れ（透過）</text>
+<rect x="60" y="340" width="150" height="46" rx="4" fill="#fbfcfd" stroke="#b8c4cf" stroke-width="1.2"/>
+<text x="135" y="362" font-size="11.5" fill="#333" text-anchor="middle">各 VPC</text>
+<text x="135" y="380" font-size="10.5" fill="#666" text-anchor="middle">ルートで向ける</text>
+<rect x="250" y="340" width="170" height="46" rx="4" fill="#eef4fa" stroke="#8fb0cc" stroke-width="1.2"/>
+<text x="335" y="362" font-size="11.5" fill="#1f3b52" text-anchor="middle">GWLB エンドポイント</text>
+<text x="335" y="380" font-size="10.5" fill="#4a6b80" text-anchor="middle">サブネットに作る</text>
+<rect x="460" y="340" width="140" height="46" rx="4" fill="#f7f4fa" stroke="#b6a7cf" stroke-width="1.2"/>
+<text x="530" y="366" font-size="11.5" fill="#3c2f52" text-anchor="middle">GWLB</text>
+<rect x="640" y="340" width="180" height="46" rx="4" fill="#fdf6ee" stroke="#c9a97a" stroke-width="1.2"/>
+<text x="730" y="362" font-size="11.5" fill="#4a3a22" text-anchor="middle">検査アプライアンス</text>
+<text x="730" y="380" font-size="10.5" fill="#6b5a3a" text-anchor="middle">ファイアウォールなど</text>
+<line x1="210" y1="363" x2="250" y2="363" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<line x1="420" y1="363" x2="460" y2="363" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<line x1="600" y1="363" x2="640" y2="363" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
+<text x="56" y="410" font-size="11" fill="#5a5a5a" text-anchor="start">戻りの経路も同じエンドポイントを通す。行きと帰りがずれると、機器が通信を落とす。</text>
+<text x="40" y="450" font-size="12" fill="#333" text-anchor="start">PrivateLink でサービスを公開するときの前段は NLB。ALB は直接つなげない（NLB のターゲットに ALB を入れる）。</text>
+</svg>
