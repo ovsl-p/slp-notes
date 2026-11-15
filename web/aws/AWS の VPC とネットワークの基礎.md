@@ -7,7 +7,7 @@ created: 2026-11-14
 updated: 2026-11-15
 status: growing
 prerequisites: [IP アドレスと CIDR, ルーティングの基礎, NAT の考え方, DNS の基礎]
-related: ["[[AWS の DNS と名前解決]]", "[[AWS のつなぎ方の選択]]", "[[Kubernetes の概要]]"]
+related: ["[[VPC の前提知識]]", "[[AWS の DNS と名前解決]]", "[[AWS のつなぎ方の選択]]", "[[Kubernetes の概要]]"]
 sources:
   - Amazon VPC ユーザーガイド（https://docs.aws.amazon.com/vpc/latest/userguide/）
   - AWS Well-Architected フレームワーク（信頼性・セキュリティの柱）
