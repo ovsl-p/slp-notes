@@ -9,3 +9,4 @@
 - [[AWS のロードバランサの使い分け]] — ALB、NLB、GWLB の層と用途
 - [[AWS のマルチアカウントのガバナンス]] — Organizations、SCP、Control Tower、Identity Center
 - [[AWS の IAM と権限の仕組み]] — ポリシーの評価順、ロールと AssumeRole、境界・SCP・セッション、クロスアカウント
+- [[AWS のストレージサービスの違い]] — S3・EBS・EFS・FSx・Storage Gateway を見せ方（オブジェクト／ブロック／ファイル）で分ける
