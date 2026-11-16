@@ -11,3 +11,4 @@
 - [[AWS の IAM と権限の仕組み]] — ポリシーの評価順、ロールと AssumeRole、境界・SCP・セッション、クロスアカウント
 - [[AWS のストレージサービスの違い]] — S3・EBS・EFS・FSx・Storage Gateway を見せ方（オブジェクト／ブロック／ファイル）で分ける
 - [[AWS のネットワークサービスの違い]] — CloudFront・Global Accelerator・Route 53 の振り分け、Transit Gateway・Direct Connect・VPN・PrivateLink の使い分け
+- [[AWS のデータベースサービスの違い]] — RDS・Aurora・DynamoDB・ElastiCache・Redshift を形と目的で分ける
