@@ -58,7 +58,7 @@
 <text x="792" y="293" font-size="12" fill="#333" text-anchor="middle">○</text>
 <text x="460" y="340" font-size="11" fill="#5a5a5a" text-anchor="start">Direct Connect は専用線だが暗号化はされない。</text>
 <text x="460" y="362" font-size="11" fill="#5a5a5a" text-anchor="start">PrivateLink は経路ではなくサービスを公開する。</text>
-<text x="460" y="384" font-size="11" fill="#5a5a5a" text-anchor="start">CIDR が重複していても使えるのは PrivateLink だけ。</text>
+<text x="460" y="384" font-size="11" fill="#5a5a5a" text-anchor="start">CIDR 重複でも使えるのは PrivateLink と VPC Lattice。</text>
 <text x="460" y="406" font-size="10.5" fill="#5a5a5a" text-anchor="start">△ は TGW 経由のときだけ中継する。VGW 終端では</text>
 <text x="460" y="422" font-size="10.5" fill="#5a5a5a" text-anchor="start">つないだ先からピアリング先の VPC へ届かない。</text>
 <text x="460" y="446" font-size="11.5" fill="#1f3b52" text-anchor="start">「どの手段か」より「経路かサービスか」で先に分ける。</text>

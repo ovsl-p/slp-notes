@@ -4,7 +4,7 @@ aliases: [AWS のネットワークサービスの違い, CloudFront, Global Acc
 domain: web
 tags: [aws, network, cloudfront, global-accelerator, route53, transit-gateway, direct-connect, sap-c03]
 created: 2026-11-16
-updated: 2026-11-16
+updated: 2026-11-17
 status: growing
 prerequisites: [IP アドレスと CIDR, DNS の仕組み, ロードバランサの層（L4 と L7）]
 related: ["[[AWS の VPC とネットワークの基礎]]", "[[AWS の DNS と名前解決]]", "[[AWS のつなぎ方の選択]]", "[[AWS のロードバランサの使い分け]]", "[[VPC の前提知識]]"]
@@ -91,7 +91,7 @@ PrivateLink は経路を流さず、特定のサービスだけを公開する�
 1. 静的な画像は S3 に置き、CloudFront（OAC）で配信する
 2. 動的な API は ALB の背後に置き、CloudFront の別のオリジンにする
 3. 独自ドメインは Route 53 のエイリアスレコードで CloudFront に向ける
-4. 障害時に別リージョンへ切り替えたいなら、Route 53 のフェイルオーバーとヘルスチェックを組み合わせる
+4. 障害時に別リージョンへ切り替えたいなら、CloudFront のオリジングループ（オリジンフェイルオーバー）で別リージョンのオリジンへ切り替える。CloudFront を通さないなら、Route 53 のフェイルオーバーで、オリジンのホスト名のレコードを切り替える
 
 ## つまずきポイント
 

@@ -4,7 +4,7 @@ aliases: [AWS の認証と認可の入口, 認証, 認可, IAM Identity Center, 
 domain: web
 tags: [aws, iam, authentication, authorization, cognito, identity-center, directory-service, sap-c03]
 created: 2026-11-16
-updated: 2026-11-16
+updated: 2026-11-17
 status: growing
 prerequisites: [認証と認可の違い, IAM の評価順（AWS の IAM と権限の仕組み）, 一時認証情報]
 related: ["[[AWS の IAM と権限の仕組み]]", "[[AWS のマルチアカウントのガバナンス]]"]
@@ -47,7 +47,7 @@ sources:
 
 社員の ID は、外部の IdP（例: 社内の認証基盤）に持たせて、Identity Center と SAML や SCIM で連携する。そして、権限セットを決めて、各アカウントに割り当てる。割り当てると、アカウントに対応するロールが作られて、利用者はそのロールを一時認証情報で引き受ける。
 
-IAM ユーザーをアカウントごとに作る運用は、退職や異動のときに消し忘れが起きやすい。入口を Identity Center に寄せれば、IdP で止めるだけで全アカウントの入口が閉じる。
+IAM ユーザーをアカウントごとに作る運用は、退職や異動のときに消し忘れが起きやすい。入口を Identity Center に寄せれば、IdP で止めるだけで新しいサインインは全アカウントで止まる。すでに発行した一時認証情報は期限まで使えるので、即座に止めたいときは Identity Center でセッションを削除する。
 
 ### 3. Cognito（アプリの利用者の入口）
 
@@ -88,7 +88,7 @@ IAM の SAML フェデレーションは、アカウントごとに SAML プロ�
 2. Identity Center が、IdP の情報をもとに、その人の権限セットを確かめる
 3. 本番アカウントに対応するロールを、一時認証情報で引き受ける
 4. 権限の上限は、組織の SCP と、ロールの権限で決まる
-5. 退職したら、IdP のアカウントを止める。Identity Center の入口も閉じる
+5. 退職したら、IdP のアカウントを止める。新しいサインインは止まるが、引き受け済みのロールセッションは期限（最大12時間）まで残る。急ぐなら、Identity Center のユーザーの Active sessions から削除する
 
 ## つまずきポイント
 

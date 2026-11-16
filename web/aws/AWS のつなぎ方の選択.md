@@ -4,7 +4,7 @@ aliases: [AWS のつなぎ方の選択, VPC ピアリング, Transit Gateway, Di
 domain: web
 tags: [aws, network, peering, transit-gateway, direct-connect, vpn, privatelink]
 created: 2026-11-14
-updated: 2026-11-15
+updated: 2026-11-17
 status: growing
 prerequisites: [VPC の基礎, ルーティングと BGP の基礎, 専用線とインターネット VPN の違い]
 related: ["[[AWS の VPC とネットワークの基礎]]", "[[AWS の DNS と名前解決]]", "[[AWS のロードバランサの使い分け]]"]
@@ -69,7 +69,7 @@ IP・CIDR とルーティングの基礎は [[VPC の前提知識]] を参照。
 | Direct Connect | 帯域と遅延を安定させたい | 開通まで時間がかかる。暗号化はされないので、必要なら VPN や MACsec を重ねる。1回線だと冗長性がない |
 | Cloud WAN | グローバルに拠点をつなぐ | ポリシーで一元管理する発想 |
 
-VPN と Direct Connect は、どちらも BGP で経路を交換する L3 の手段なので、CIDR が重複した範囲には経路を通せない。中継できるかは終端先で決まる。VGW で終端すると、つないだ先からピアリング先の VPC へは届かない（経路の端から端へ渡す中継は非対応）。複数の VPC へ中継したいなら、Transit Gateway か Direct Connect ゲートウェイを挟む。
+VPN と Direct Connect は、どちらも経路を交換する L3 の手段なので、CIDR が重複した範囲には経路を通せない（VPN は BGP を使わない静的ルートでも作れるが、この性質は変わらない）。中継できるかは終端先で決まる。VGW で終端すると、つないだ先からピアリング先の VPC へは届かない。オンプレから複数の VPC へ届かせたいだけなら Direct Connect ゲートウェイで足りるが、つないだ VPC 同士の通信は通さない。VPC 同士も含めて中継したいなら Transit Gateway を挟む。
 
 Direct Connect は、どの経路を流すかで仮想インターフェイス（VIF）を選ぶ。プライベート VIF は VPC 向け、パブリック VIF は AWS のパブリックサービス向け、トランジット VIF は Transit Gateway 向けになる。
 
@@ -81,7 +81,7 @@ PrivateLink の基本形では、提供側が NLB の後ろにサービスを置
 
 VPC Lattice は、サービス間の接続を主に L7（HTTP や gRPC）で扱う仕組みで、パスによる振り分けや IAM による認証をまとめてかけられる。
 
-「CIDR が重複している」「相手に経路を見せたくない」「特定のサービスのみ公開したい」のどれかが出たら、PrivateLink 系を疑う。
+「CIDR が重複している」「相手に経路を見せたくない」「特定のサービスのみ公開したい」のどれかが出たら、PrivateLink か VPC Lattice を疑う。VPC Lattice も、CIDR が重複した VPC の間で使える。
 
 ### 4. セグメント分離
 

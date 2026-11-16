@@ -4,7 +4,7 @@ aliases: [AWS のコンピューティングサービスの違い, EC2, Auto Sca
 domain: web
 tags: [aws, compute, ec2, lambda, ecs, eks, fargate, autoscaling, sap-c03]
 created: 2026-11-16
-updated: 2026-11-16
+updated: 2026-11-17
 status: growing
 prerequisites: [仮想化（1台の物理機械の中に複数の仮想マシン）, コンテナの基本（イメージと実行の違い）, 非同期処理の考え方]
 related: ["[[AWS のストレージサービスの違い]]", "[[AWS のデータベースサービスの違い]]", "[[AWS の疎結合の部品の違い]]", "[[Kubernetes の概要]]"]
@@ -39,7 +39,7 @@ sources:
 | 管理の範囲 | サービス | 一言で |
 | --- | --- | --- |
 | OS まで自分で管理 | EC2 | 仮想サーバーを借りる。最も自由 |
-| コンテナだけ管理 | ECS、EKS（+ Fargate） | サーバーを意識せず、コンテナを動かす |
+| コンテナだけ管理 | ECS、EKS（+ Fargate） | コンテナを動かす。Fargate ならサーバーを意識しない |
 | 関数だけ書く | Lambda | 呼ばれたときだけ、コードを実行する |
 | アプリだけ渡す | Elastic Beanstalk | デプロイと管理を任せる。裏は EC2 |
 
@@ -73,7 +73,7 @@ Lambda は、関数を呼び出されたときだけ動かす。サーバーの�
 制限を覚えておく。
 - 1回の実行は最長15分。長い処理には向かない。
 - メモリは128 MB から10 GB まで。CPU はメモリに比例して割り当てられる。
-- 同時実行数に上限があり、超えると待たされる。
+- 同時実行数に上限があり、超えるとスロットリングされる。同期呼び出しは 429 TooManyRequestsException のエラーが返り、非同期呼び出しは Lambda が再試行する。
 
 SQS、S3、EventBridge、API Gateway などから直接呼ばれる。
 
