@@ -13,3 +13,4 @@
 - [[AWS のネットワークサービスの違い]] — CloudFront・Global Accelerator・Route 53 の振り分け、Transit Gateway・Direct Connect・VPN・PrivateLink の使い分け
 - [[AWS のデータベースサービスの違い]] — RDS・Aurora・DynamoDB・ElastiCache・Redshift を形と目的で分ける
 - [[AWS の疎結合の部品の違い]] — SQS・SNS・EventBridge・Step Functions・Kinesis を「溜める・配る・振り分ける・順に進める・流す」で分ける
+- [[AWS のコンピューティングサービスの違い]] — EC2・Auto Scaling・Lambda・ECS/EKS・Fargate・Beanstalk を管理の範囲と処理の時間で分ける
