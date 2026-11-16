@@ -44,9 +44,9 @@ sources:
 
 どちらも利用者に近い場所（エッジ）から AWS に入る。違いは中身を見るかどうか。
 
-CloudFront は HTTP と HTTPS を扱い、コンテンツをエッジに保存（キャッシュ）する。静的な画像や動画に強い。S3 を配信元にするときは、OAC（Origin Access Control）で S3 を直接公開せずに CloudFront 経由だけに絞れる。
+CloudFront は HTTP と HTTPS を扱い、コンテンツをエッジに保存（キャッシュ）する。静的な画像や動画に強い。S3 を配信元にするときは、OAC（Origin Access Control）を使う。これで S3 を直接公開せず、CloudFront 経由だけに絞れる。
 
-Global Accelerator は固定の IP を2つ（anycast）持ち、TCP と UDP をそのまま AWS のネットワーク内で目的地まで運ぶ。キャッシュはしない。ゲームや IoT の UDP、固定 IP を顧客に教える必要がある場合、リージョンをまたぐ障害切り替えの速さが要件になるときに向く。
+Global Accelerator は固定の IP を2つ（anycast）持つ。TCP と UDP を、AWS のネットワーク内で目的地まで運ぶ。キャッシュはしない。ゲームや IoT の UDP、固定 IP を顧客に教える必要がある場合に向く。リージョンをまたぐ障害切り替えを速くしたいときも候補になる。
 
 ### 3. Route 53 のルーティングポリシー
 
