@@ -15,3 +15,4 @@
 - [[AWS の疎結合の部品の違い]] — SQS・SNS・EventBridge・Step Functions・Kinesis を「溜める・配る・振り分ける・順に進める・流す」で分ける
 - [[AWS のコンピューティングサービスの違い]] — EC2・Auto Scaling・Lambda・ECS/EKS・Fargate・Beanstalk を管理の範囲と処理の時間で分ける
 - [[AWS の認証と認可の入口]] — 人・アプリ・利用者の入口（Identity Center、ロール、Cognito、Directory Service）を分ける
+- [[AWS の暗号化と秘密情報の管理]] — KMS と CloudHSM（鍵を誰が持つか）、Secrets Manager とパラメータストア、ACM
