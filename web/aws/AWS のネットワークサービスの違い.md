@@ -1,0 +1,119 @@
+---
+title: AWS のネットワークサービスの違い
+aliases: [AWS のネットワークサービスの違い, CloudFront, Global Accelerator, Route 53, routing policy, Transit Gateway, Direct Connect, Site-to-Site VPN, PrivateLink]
+domain: web
+tags: [aws, network, cloudfront, global-accelerator, route53, transit-gateway, direct-connect, sap-c03]
+created: 2026-11-16
+updated: 2026-11-16
+status: growing
+prerequisites: [IP アドレスと CIDR, DNS の仕組み, ロードバランサの層（L4 と L7）]
+related: ["[[AWS の VPC とネットワークの基礎]]", "[[AWS の DNS と名前解決]]", "[[AWS のつなぎ方の選択]]", "[[AWS のロードバランサの使い分け]]", "[[VPC の前提知識]]"]
+sources:
+  - Amazon CloudFront デベロッパーガイド
+  - AWS Global Accelerator デベロッパーガイド
+  - Amazon Route 53 デベロッパーガイド（ルーティングポリシー、エイリアスレコード）
+  - AWS Transit Gateway ユーザーガイド
+  - AWS Direct Connect / Site-to-Site VPN ユーザーガイド
+---
+
+# AWS のネットワークサービスの違い
+
+## ひとことで
+
+「誰が近くから読むか」「どの層で振り分けるか」「どこまで経路を流すか」の3つで、ネットワークのサービスは分かれる。
+
+## なぜ効くか / どこで使うか
+
+分野1の設問は、通信をどこで受け、どこへ流し、どう切り替えるかを選ばせる。サービス名だけ覚えても、「速くしたい」「止まりたくない」「社内だけにしたい」といった要件に当てはめられない。
+
+## 前提となる知識
+
+[[VPC の前提知識]] の IP・CIDR・ルーティングが分かっていればよい。ロードバランサの L4（TCP）と L7（HTTP）の違いは [[AWS のロードバランサの使い分け]] を参照。
+
+## 本体の解説
+
+### 1. 3つの軸で分ける
+
+| 軸 | 問い | 代表的なサービス |
+| --- | --- | --- |
+| 近くで受けて配る | 利用者に近い場所でキャッシュや終端をするか | CloudFront、Global Accelerator |
+| 名前から振り分ける | どの IP に案内するか（DNS） | Route 53 |
+| 中で流す | VPC や拠点の間をどう経路でつなぐか | Transit Gateway、Direct Connect、VPN、PrivateLink |
+
+### 2. CloudFront と Global Accelerator
+
+どちらも利用者に近い場所（エッジ）から AWS に入る。違いは中身を見るかどうか。
+
+CloudFront は HTTP と HTTPS を扱い、コンテンツをエッジに保存（キャッシュ）する。静的な画像や動画に強い。S3 を配信元にするときは、OAC（Origin Access Control）で S3 を直接公開せずに CloudFront 経由だけに絞れる。
+
+Global Accelerator は固定の IP を2つ（anycast）持ち、TCP と UDP をそのまま AWS のネットワーク内で目的地まで運ぶ。キャッシュはしない。ゲームや IoT の UDP、固定 IP を顧客に教える必要がある場合、リージョンをまたぐ障害切り替えの速さが要件になるときに向く。
+
+### 3. Route 53 のルーティングポリシー
+
+DNS の答えを、条件によって変える仕組み。設問では条件語で選ぶ。
+
+| ポリシー | 向く場面 |
+| --- | --- |
+| シンプル | 1つの宛先だけ |
+| 加重 | 割合で分ける（カナリアリリースや移行の段階的切り替え） |
+| レイテンシー | 利用者から一番速いリージョンへ |
+| フェイルオーバー | 障害時にだけ待機系へ（ヘルスチェックと組み合わせる） |
+| 地理的な場所 | 国や地域で分ける（法令やライセンス） |
+
+エイリアスレコードは、ELB や CloudFront などの AWS リソースを、名前で直接指す特別なレコード。ゾーンの頂点（example.com そのもの）にも置ける。CNAME は頂点に置けないので、この違いは頻出。
+
+### 4. 中で流す手段
+
+Transit Gateway は拠点を集める中継のハブ。VPC や VPN、Direct Connect をアタッチして、ルートテーブルで流す先を分ける。ハブ経由で届くので、推移的（中継する）。VPC が増えるほど効く。
+
+Direct Connect は専用線で、回線の帯域と遅延を安定させる。ただし暗号化は標準では無いので、暗号化が要るなら VPN を重ねるか、別の仕組みで暗号化する。冗長化は回線もロケーションも二重にする。
+
+Site-to-Site VPN は、インターネットの上に暗号化されたトンネルを作る。速く安く作れるが、帯域と遅延は回線に依存する。トンネルは2本張って冗長化するのが基本。
+
+PrivateLink は経路を流さず、特定のサービスだけを公開する。相手の VPC と CIDR が重なっていても使える。
+
+### 5. 選び方の順番
+
+1. 利用者に近い場所で受けたい → CloudFront（HTTP）か Global Accelerator（TCP・UDP、固定 IP）
+2. どの宛先へ案内するか → Route 53 のルーティングポリシー
+3. 拠点や VPC をつなぐ → 数が多ければ Transit Gateway、少なければピアリング
+4. 帯域と遅延の安定が要る → Direct Connect、急ぎで安く → VPN
+5. 特定のサービスだけ見せる → PrivateLink
+
+## 具体例・コード
+
+グローバル向けの Web サービスの例。
+
+1. 静的な画像は S3 に置き、CloudFront（OAC）で配信する
+2. 動的な API は ALB の背後に置き、CloudFront の別のオリジンにする
+3. 独自ドメインは Route 53 のエイリアスレコードで CloudFront に向ける
+4. 障害時に別リージョンへ切り替えたいなら、Route 53 のフェイルオーバーとヘルスチェックを組み合わせる
+
+## つまずきポイント
+
+- Global Accelerator もキャッシュすると思う。キャッシュはしない。
+- Direct Connect を使えば暗号化もされると思う。標準では暗号化されない。
+- ゾーンの頂点に CNAME を置けると思う。置けないので、エイリアスレコードを使う。
+- Route 53 の加重を、障害切り替えの仕組みだと思う。障害時の切り替えはフェイルオーバーで、加重は割合の制御。
+- PrivateLink をピアリングの代わりに、いつでも使えると思う。経路を流すものではないので、通信の向きと用途が違う。
+
+## 疑問・TODO
+
+- [ ] CloudFront のキャッシュキーと、Global Accelerator のエンドポイント重みの違いを整理する
+- [ ] Route 53 のヘルスチェックの判定条件（間隔と閾値）を確かめる
+- [ ] Transit Gateway のルートテーブルを、共有サービス型で1つ書いてみる
+
+## 関連ノート
+
+- [[AWS の VPC とネットワークの基礎]] — 経路とサブネットの前提
+- [[AWS の DNS と名前解決]] — Route 53 Resolver と名前解決の向き
+- [[AWS のつなぎ方の選択]] — 拠点やサービスをどうつなぐか
+- [[AWS のロードバランサの使い分け]] — ALB・NLB・GWLB の層
+
+## 出典
+
+- Amazon CloudFront デベロッパーガイド
+- AWS Global Accelerator デベロッパーガイド
+- Amazon Route 53 デベロッパーガイド
+- AWS Transit Gateway ユーザーガイド
+- AWS Direct Connect / Site-to-Site VPN ユーザーガイド
