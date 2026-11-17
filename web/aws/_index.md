@@ -18,3 +18,4 @@
 - [[AWS の暗号化と秘密情報の管理]] — KMS と CloudHSM（鍵を誰が持つか）、Secrets Manager とパラメータストア、ACM
 - [[AWS の通信とアプリの防御]] — WAF・Shield（DDoS）・Network Firewall・セキュリティグループと NACL を、守る層で分ける
 - [[AWS の組織の統制サービスの違い]] — SCP（ID の上限）・RCP（リソースの上限）・RAM（共有）・Control Tower（土台）を、何に効くかで分ける
+- [[AWS の検知と監査の違い]] — CloudTrail（記録）・Config（設定の評価）・GuardDuty（脅威の検知）・Security Hub（集約）を、問いで分ける
