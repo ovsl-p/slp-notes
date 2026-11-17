@@ -4,16 +4,19 @@ aliases: [AWS の通信とアプリの防御, WAF, Shield, Network Firewall, セ
 domain: web
 tags: [aws, waf, shield, network-firewall, security-group, nacl, sap-c03]
 created: 2026-11-16
-updated: 2026-11-16
+updated: 2026-11-18
 status: growing
 prerequisites: [VPC の前提知識, ステートフルとステートレスの違い]
 related: ["[[AWS の VPC とネットワークの基礎]]", "[[AWS の IAM と権限の仕組み]]", "[[AWS のロードバランサの使い分け]]"]
 sources:
   - https://docs.aws.amazon.com/waf/latest/developerguide/how-aws-waf-works.html
   - https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html
+  - https://docs.aws.amazon.com/waf/latest/developerguide/ddos-automatic-app-layer-response-behavior.html
   - https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html
+  - https://docs.aws.amazon.com/network-firewall/latest/developerguide/tls-inspection-configurations.html
   - https://docs.aws.amazon.com/vpc/latest/userguide/security-group-rules.html
   - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
+  - https://docs.aws.amazon.com/vpc/latest/userguide/working-with-aws-managed-prefix-lists.html
 ---
 
 # AWS の通信とアプリの防御
@@ -66,7 +69,7 @@ WAF は CloudFront、ALB、API Gateway の前に付けて使う。ルールは�
 
 Shield Standard は、全利用者に自動で付く。追加料金はかからない。ネットワーク層とトランスポート層（L3/L4）の DDoS を防ぐ。
 
-Shield Advanced は有料のサブスクリプション。L7 の DDoS 対策を含む。L7 の対策には、WAF のマネージドルールを使う。ほかに、DDoS 対応チームへの相談や、攻撃による料金の補償がある。
+Shield Advanced は有料のサブスクリプション。L7 の DDoS 対策を含む。L7 の自動緩和は、保護するリソースに Web ACL を関連付けて使う。Shield Advanced が Web ACL に自分のルールグループを追加し、既知の攻撃元からのレートベースルール（ShieldKnownOffenderIPRateBasedRule）と、攻撃の特徴から作ったルールで Count か Block を選ぶ。ほかに、DDoS 対応チームへの相談や、攻撃による料金の補償がある。
 
 ### 4. Network Firewall
 
@@ -82,7 +85,9 @@ Network Firewall は、VPC から外へ出ていく通信を見張り、マル�
 
 #### 通信の中身とは、パケットのどこまでか
 
-中身は全部ではなく、ヘッダーの情報（IP、ポート、ドメイン名）と、パケットのデータ部分に含まれる文字列の両方を見る。HTTPS は暗号化されているので本文は読めないが、接続先のドメイン名（SNI）は見られるので、そこでの許可や拒否ができる。
+見るのは、IP アドレスとポート（ヘッダー）と、データ部分に含まれる文字列の両方になる。ドメイン名はヘッダーには入っていない。TLS の ClientHello にある SNI、HTTP の Host ヘッダー、DNS の問い合わせといったデータ部分から読む。
+
+HTTPS は暗号化されているので、既定では本文まで読めない。読めるのは SNI までで、そこでの許可や拒否になる。TLS 検査の設定を入れると、ACM の証明書で復号し、復号した本文をステートフルルールで検査してから再暗号化する。
 
 ### 5. セキュリティグループと NACL の違い
 
@@ -102,7 +107,7 @@ Web アプリ1つを例に、通信の流れと防御を整理する。
 
 1. ユーザーのリクエストは CloudFront に届く。WAF の Web ACL を CloudFront に付け、マネージドルールで既知の攻撃を遮断する。
 2. CloudFront から ALB へ転送される。Shield Standard は、この経路の L3/L4 の DDoS を自動で防ぐ。
-3. ALB のセキュリティグループは、送信元を CloudFront からのアクセスに限定する。
+3. ALB のセキュリティグループは、送信元を CloudFront のオリジン向けマネージドプレフィックスリスト（com.amazonaws.global.cloudfront.origin-facing）に限定する。このリストの重みは 55 で、既定の 60 ルールのうち残りは5件になる。経路をさらに絞るなら、CloudFront が付けるカスタムヘッダーを ALB のリスナールールで検査する。
 4. アプリの EC2 のセキュリティグループは、ALB のセキュリティグループを参照して、ALB からの通信だけを許可する。
 
 ```
@@ -113,7 +118,7 @@ app-sg  inbound: TCP 8080, source = alb-sg
 
 ## つまずきポイント
 
-- Shield Advanced を入れれば DDoS をすべて防げると思う。実際は、Advanced は有料で、L7 の対策には WAF のルールが要る。
+- Shield Advanced を入れれば DDoS をすべて防げると思う。実際は、Advanced は有料で、L7 の自動緩和には保護するリソースへの Web ACL の関連付けが要る。
 - WAF は EC2 に直接付けられると思う。実際は、CloudFront、ALB、API Gateway などの前に付ける。
 - Network Firewall はすべての通信を自動で検査すると思う。実際は、ルートテーブルで経由させたサブネットの通信だけが対象。
 - セキュリティグループで拒否のルールを書けばよいと思う。実際は、セキュリティグループは許可のみで、拒否は NACL で書く。
@@ -135,6 +140,9 @@ app-sg  inbound: TCP 8080, source = alb-sg
 
 - https://docs.aws.amazon.com/waf/latest/developerguide/how-aws-waf-works.html
 - https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html
+- https://docs.aws.amazon.com/waf/latest/developerguide/ddos-automatic-app-layer-response-behavior.html
 - https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html
+- https://docs.aws.amazon.com/network-firewall/latest/developerguide/tls-inspection-configurations.html
 - https://docs.aws.amazon.com/vpc/latest/userguide/security-group-rules.html
 - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
+- https://docs.aws.amazon.com/vpc/latest/userguide/working-with-aws-managed-prefix-lists.html

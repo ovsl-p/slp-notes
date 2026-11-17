@@ -1,17 +1,21 @@
 ---
 title: AWS の組織の統制サービスの違い
-aliases: [AWS の組織の統制サービスの違い, Organizations, SCP, RCP, Control Tower, RAM, Account Factory, ガードレール, サービスコントロールポリシー, リソースコントロールポリシー, リソース共有]
+aliases: [AWS の組織の統制サービスの違い, Organizations, SCP, RCP, Control Tower, RAM, Account Factory, ガードレール, コントロール, サービスコントロールポリシー, リソースコントロールポリシー, リソース共有]
 domain: web
 tags: [aws, organizations, scp, rcp, control-tower, ram, governance, sap-c03]
 created: 2026-11-16
-updated: 2026-11-16
+updated: 2026-11-18
 status: growing
 prerequisites: [IAM の評価順（AWS の IAM と権限の仕組み）, アカウントと組織単位（OU）の考え方]
 related: ["[[AWS のマルチアカウントのガバナンス]]", "[[AWS の IAM と権限の仕組み]]", "[[AWS の通信とアプリの防御]]"]
 sources:
   - https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
+  - https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps_evaluation.html
+  - https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html
   - https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html
+  - https://docs.aws.amazon.com/controltower/latest/controlreference/controls.html
   - https://docs.aws.amazon.com/ram/latest/userguide/what-is.html
+  - https://docs.aws.amazon.com/ram/latest/userguide/getting-started-sharing.html
 ---
 
 # AWS の組織の統制サービスの違い
@@ -34,7 +38,7 @@ SCP は ID の権限に上限をかけ、RCP はリソース側に上限をか�
 | 管理アカウント | Organizations の組織を作ったアカウント。請求と組織全体の管理を担う |
 | メンバーアカウント | 管理アカウント以外の、組織に所属するアカウント |
 | 許可の天井 | 権限の上限。この範囲を超える権限は、ID にポリシーで許可があっても使えない |
-| ガードレール | Control Tower が用意する、統制のルール。予防・検出・プロアクティブの3種がある |
+| コントロール（旧称ガードレール） | Control Tower が用意する、統制のルール。予防・検出・プロアクティブの3種がある |
 
 マルチアカウントの設計は [[AWS のマルチアカウントのガバナンス]] を参照。
 
@@ -44,18 +48,20 @@ SCP は ID の権限に上限をかけ、RCP はリソース側に上限をか�
 
 | サービス | 制御する対象 | 一言で |
 |---|---|---|
-| SCP（サービスコントロールポリシー） | ID（ユーザー・ロール） | ID の権限の上限を決める |
+| SCP（サービスコントロールポリシー） | ID（ユーザー・ロール・ルートユーザー） | ID の権限の上限を決める |
 | RCP（リソースコントロールポリシー） | リソース（S3 バケットなど） | リソース側へのアクセスの上限を決める |
 | RAM（Resource Access Manager） | 共有するリソース | リソースを別アカウントと共有する |
-| Control Tower | 組織全体の土台 | 型どおりにアカウントを作り、統制を保つ |
+| Control Tower | 組織全体の土台（ランディングゾーン）づくり | 型どおりにアカウントを作り、統制を保つ |
 
 ### 2. SCP（サービスコントロールポリシー）: 権限の上限
 
-SCP は ID に効く上限である。ID に権限を付与はしない。権限を与えるのは IAM のポリシーであり、SCP はその上限として働く。
+SCP は ID に効く上限である。メンバーアカウントのルートユーザーも対象になる。ID に権限を付与はしない。権限を与えるのは IAM のポリシーであり、SCP はその上限として働く。
 
 SCP は OU に付けると、配下のアカウントに継承される。管理アカウントには効かない。サービスにリンクされたロールには効かない。
 
 SCP のデフォルトは FullAWSAccess で、これは全サービスの操作を許可する。ほかに、拒否リスト型（特定の操作を拒否し、それ以外は許可する）と許可リスト型（許可した操作だけを通す）がある。
+
+SCP のポリシー文書は 1 つあたり 10,240 文字までで、RCP は 5,120 文字までになる。
 
 ### 3. RCP（リソースコントロールポリシー）: リソース側の上限
 
@@ -63,34 +69,36 @@ RCP はリソース側の上限である。S3 バケットなど、対象のリ�
 
 RCP は同じアカウント内からのアクセスにも効く。SCP が ID 側の上限であるのに対し、RCP はリソース側から同じ範囲を縛る、という位置づけになる。
 
-組織外からのアクセスをどう扱うかは、一次資料で確認する。TODO に入れる。
+RCP は、呼び出し元が組織の外にいても効く。S3 バケットへの外部からのアクセスを止めたい場面がこれにあたる。効くのは S3、STS、KMS、SQS、Secrets Manager など対応しているサービスだけで、範囲は [[AWS の IAM と権限の仕組み]] の §4 にまとめてある。
 
 #### SCP はデフォルトで全部通す。RCP も同じか
 
-同じ。SCP も RCP も、有効にした時点で FullAWSAccess が組織のルート、すべての OU、すべてのアカウントに付く。どちらも「全部通す天井」が先に付いている状態で、そこに Deny を足していく。
+どちらも「全部通す天井」が先に付いた状態から始め、そこに Deny を足していく。ただし既定のポリシーの名前は違う。SCP は FullAWSAccess、RCP は RCPFullAWSAccess になる。
 
-違いは、天井の中身が通すものでも、付与ではないこと。FullAWSAccess は権限を与えない。与えるのは IAM かリソースのポリシーで、天井はその上限として働く。RCP を有効にしても、既存の IAM 権限はそのまま動く。
+RCPFullAWSAccess は、RCP を有効にした時点で組織のルート、すべての OU、すべてのアカウントに付き、外せない。SCP の FullAWSAccess は外せるので、許可リスト型にするときは外して自前の Allow に置き換える。
 
-### 4. Control Tower: 組織の上に作るランディングゾーン
+どちらも権限は与えない。与えるのは IAM かリソースのポリシーで、天井はその上限として働く。RCP を有効にしても、既存の IAM 権限はそのまま動く。
 
-Control Tower は Organizations の上に作るランディングゾーン（土台）である。組織の設計と初期構成を、型どおりに整える仕組みである。
+### 4. Control Tower: 組織の上にランディングゾーンを作る
+
+Control Tower は、Organizations の上にランディングゾーン（土台）を作り、保つサービスである。組織の設計と初期構成を、型どおりに整える。
 
 #### ランディングゾーンとは何か
 
-複数アカウントの環境を、最初から決まった形で用意した状態のこと。アカウントの置き場所（OU）、ログや監査用のアカウント、守るべきルール（ガードレール）を先に整えておく。家を建てる前に土台と水道・電気を通しておくのに近い。Control Tower は、この土台を自動で作り、あとから新しいアカウントも同じ形で増やせるようにするサービス。
+複数アカウントの環境を、最初から決まった形で用意した状態のこと。アカウントの置き場所（OU）、ログや監査用のアカウント、守るべきルール（コントロール）を先に整えておく。家を建てる前に土台と水道・電気を通しておくのに近い。Control Tower は、この土台を自動で作り、あとから新しいアカウントも同じ形で増やせるようにするサービス。
 
 - Account Factory: 新しいアカウントを型どおりに作る
 - ログ用・監査用のアカウントを自動で作る
-- ガードレール: 統制のルールで、次の3種がある
-  - 予防: SCP で違反する操作を止める
+- コントロール（旧称ガードレール）: 統制のルールで、次の3種がある
+  - 予防: SCP や RCP で違反する操作を止める
   - 検出: Config ルールで違反を見つける
   - プロアクティブ: デプロイ前にリソースを検査する
 
 ### 5. RAM（Resource Access Manager）: リソースを別アカウントと共有する
 
-RAM はリソースを別アカウントと共有する仕組みである。組織内であれば、承認なしで共有できる。
+RAM はリソースを別アカウントと共有する仕組みである。管理アカウントで Organizations との共有を有効にしていれば、組織内の共有は招待のやり取りなしで成立する。有効にしていなければ、組織内でも招待を受け入れる必要がある。
 
-ランディングゾーンそのものは共有できない。ただし Route 53 Profiles を RAM で共有する、という形が使える。
+共有できるのはリソース単位で、ランディングゾーンを丸ごと渡すことはできない。DNS の設定を複数の VPC やアカウントで揃えたいときは、Route 53 Profiles を RAM で共有する。
 
 SCP とは役割が違う。RAM は共有を広げるものであり、SCP と RCP は上限をかけるものである。共有されたリソースを使う側のアカウントの principal には、そのアカウントの SCP が引き続き効く。共有することで SCP を逃れられるわけではない。
 
@@ -140,13 +148,11 @@ SCP とは役割が違う。RAM は共有を広げるものであり、SCP と R
 - SCP で権限が与えられると思う。実際は与えない。SCP は上限のみを決め、権限は IAM ポリシーで付与する。
 - 管理アカウントも SCP で止められると思う。実際は止められない。管理アカウントには SCP が効かない。
 - RAM で共有すれば SCP の影響を受けないと思う。実際は受ける。共有されたリソースを使う側のアカウントの SCP が効く。
-- Control Tower と Organizations は別物だと思う。実際は Control Tower は Organizations の上に作られる。Organizations が土台であり、Control Tower はその上のランディングゾーンである。
+- Control Tower がランディングゾーンそのものだと思う。実際は、Control Tower は Organizations の上にランディングゾーンを作り、保つサービスである。
 
 ## 疑問・TODO
 
-- [ ] RCP の組織外アクセスの扱いを、一次資料で確認する
-- [ ] SCP の上限値を、一次資料で確認する（本ノートでは数値を書かない）
-- [ ] ガードレールの一覧を、一次資料で確認する
+- [ ] コントロールの一覧を、一次資料で確認する
 - [ ] 上の JSON の例を、テスト用の組織で動かして確かめる
 
 ## 関連ノート
@@ -158,5 +164,9 @@ SCP とは役割が違う。RAM は共有を広げるものであり、SCP と R
 ## 出典
 
 - https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
+- https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps_evaluation.html
+- https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html
 - https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html
+- https://docs.aws.amazon.com/controltower/latest/controlreference/controls.html
 - https://docs.aws.amazon.com/ram/latest/userguide/what-is.html
+- https://docs.aws.amazon.com/ram/latest/userguide/getting-started-sharing.html
