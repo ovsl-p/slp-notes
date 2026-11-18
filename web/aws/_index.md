@@ -19,3 +19,4 @@
 - [[AWS の通信とアプリの防御]] — WAF・Shield（DDoS）・Network Firewall・セキュリティグループと NACL を、守る層で分ける
 - [[AWS の組織の統制サービスの違い]] — SCP（ID の上限）・RCP（リソースの上限）・RAM（共有）・Control Tower（土台）を、何に効くかで分ける
 - [[AWS の検知と監査の違い]] — CloudTrail（記録）・Config（設定の評価）・GuardDuty（脅威の検知）・Security Hub（集約）を、問いで分ける
+- [[AWS の証跡の提出]] — Artifact（AWS 基盤の証拠）と Audit Manager（自分の利用の証拠）を、証拠の出どころで分ける
