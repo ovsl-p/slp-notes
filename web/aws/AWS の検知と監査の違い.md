@@ -70,7 +70,7 @@ GuardDuty は、継続的に監視して悪意のある活動を検知する。�
 
 2025年12月に新しい Security Hub が一般提供になり、それまでの Security Hub は Security Hub CSPM という名前に変わった。役割は2つに分かれる。
 
-Security Hub は、GuardDuty、Inspector、Macie、Security Hub CSPM の検出結果（findings）を集めて関連付け、複数の問題が重なって生まれる露出（exposure）を計算する。Security Hub CSPM は、セキュリティ基準ごとに設定をチェックし、不備を検出する。Security Hub を有効にすると、Security Hub CSPM も自動で有効になる。
+Security Hub は、GuardDuty、Inspector、Macie、Security Hub CSPM の検出結果（findings）を集めて関連付け、複数の問題が重なって生まれる露出（exposure）を計算する。Security Hub CSPM は、セキュリティ基準ごとに設定をチェックし、不備を検出する。2つは別々に有効にする。Security Hub CSPM を有効にしていないと、Security Hub は CSPM の検出結果を露出の計算に使えない。AWS は両方を有効にすることを勧めている。
 
 試験では、問題の版によって旧名の Security Hub が「基準のチェック」の意味で出る。設問が集約と優先度の話か、基準の適合の話かで読み分ける。
 
