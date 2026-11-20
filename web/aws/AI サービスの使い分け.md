@@ -1,5 +1,5 @@
 ---
-title: AWS の AI サービスの使い分け
+title: AI サービスの使い分け
 aliases: [AWS の AI サービスの使い分け, AWS の AI と ML の違い, Bedrock, Amazon Bedrock, SageMaker AI, ナレッジベース, RAG, AgentCore, 生成AI, 基盤モデル, 組み込みAI]
 domain: web
 tags: [aws, ai, generative-ai, bedrock, sagemaker, rag, agents, agentcore, guardrails, sap-c03]
@@ -7,7 +7,7 @@ created: 2026-11-20
 updated: 2026-11-20
 status: growing
 prerequisites: [基盤モデルとトークン, ベクトル検索]
-related: ["[[AWS の疎結合の部品の違い]]", "[[AWS のコンピューティングサービスの違い]]", "[[AWS の IAM と権限の仕組み]]", "[[AWS の暗号化と秘密情報の管理]]"]
+related: ["[[疎結合の部品の違い]]", "[[コンピューティングサービスの違い]]", "[[IAM と権限の仕組み]]", "[[暗号化と秘密情報の管理]]"]
 sources:
   - https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
   - https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
@@ -35,7 +35,7 @@ sources:
   - https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
 ---
 
-# AWS の AI サービスの使い分け
+# AI サービスの使い分け
 
 ## ひとことで
 
@@ -194,10 +194,10 @@ RAG には2つの検査が使える。文脈グラウンディング検査は、
 
 ## 関連ノート
 
-- [[AWS の疎結合の部品の違い]] — エージェントの裏側で使うキューとイベントの使い分け
-- [[AWS のコンピューティングサービスの違い]] — Lambda や ECS にエージェントを載せる場合の比較
-- [[AWS の IAM と権限の仕組み]] — モデル呼び出しとツール実行を誰に許すか
-- [[AWS の暗号化と秘密情報の管理]] — プロンプトに含む秘密情報と鍵の扱い
+- [[疎結合の部品の違い]] — エージェントの裏側で使うキューとイベントの使い分け
+- [[コンピューティングサービスの違い]] — Lambda や ECS にエージェントを載せる場合の比較
+- [[IAM と権限の仕組み]] — モデル呼び出しとツール実行を誰に許すか
+- [[暗号化と秘密情報の管理]] — プロンプトに含む秘密情報と鍵の扱い
 
 ## 出典
 

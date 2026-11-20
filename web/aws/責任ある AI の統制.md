@@ -1,5 +1,5 @@
 ---
-title: AWS の責任ある AI の統制
+title: 責任ある AI の統制
 aliases: [AWS の責任ある AI の統制, 責任あるAI, responsible AI, AI ガバナンス, Guardrails, AgentCore Identity, ヒューマンインザループ, 人の承認, Bedrock ガードレール]
 domain: web
 tags: [aws, ai, generative-ai, guardrails, agentcore, identity, governance, human-in-the-loop, sap-c03]
@@ -7,7 +7,7 @@ created: 2026-11-20
 updated: 2026-11-20
 status: growing
 prerequisites: [基盤モデルとトークン, ベクトル検索]
-related: ["[[AWS の AI サービスの使い分け]]", "[[AWS の IAM と権限の仕組み]]", "[[AWS の検知と監査の違い]]", "[[AWS の組織の統制サービスの違い]]"]
+related: ["[[AI サービスの使い分け]]", "[[IAM と権限の仕組み]]", "[[検知と監査の違い]]", "[[組織の統制サービスの違い]]"]
 sources:
   - https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
   - https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tiers.html
@@ -24,7 +24,7 @@ sources:
   - https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
 ---
 
-# AWS の責任ある AI の統制
+# 責任ある AI の統制
 
 ## ひとことで
 
@@ -137,10 +137,10 @@ Guardrails には Classic と Standard の2つの水準がある。Standard で�
 
 ## 関連ノート
 
-- [[AWS の AI サービスの使い分け]] — Bedrock、ナレッジベース、AgentCore の役割
-- [[AWS の IAM と権限の仕組み]] — 人の権限をどう絞るか。エージェントの権限はこの考え方の延長にある
-- [[AWS の検知と監査の違い]] — 呼び出しの記録をどこに集め、どう評価するか
-- [[AWS の組織の統制サービスの違い]] — 組織全体で禁止事項を効かせる仕組み
+- [[AI サービスの使い分け]] — Bedrock、ナレッジベース、AgentCore の役割
+- [[IAM と権限の仕組み]] — 人の権限をどう絞るか。エージェントの権限はこの考え方の延長にある
+- [[検知と監査の違い]] — 呼び出しの記録をどこに集め、どう評価するか
+- [[組織の統制サービスの違い]] — 組織全体で禁止事項を効かせる仕組み
 
 ## 出典
 

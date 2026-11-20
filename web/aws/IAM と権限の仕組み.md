@@ -1,5 +1,5 @@
 ---
-title: AWS の IAM と権限の仕組み
+title: IAM と権限の仕組み
 aliases: [AWS の IAM と権限の仕組み, IAM, ポリシー評価, AssumeRole, 権限の境界, セッションポリシー, IAM ロール]
 domain: web
 tags: [aws, iam, security, policy, sts, federation]
@@ -7,14 +7,14 @@ created: 2026-11-15
 updated: 2026-11-17
 status: growing
 prerequisites: [認証と認可の違い, JSON の読み方, 一時認証情報という考え方]
-related: ["[[AWS のマルチアカウントのガバナンス]]", "[[AWS の VPC とネットワークの基礎]]"]
+related: ["[[マルチアカウントのガバナンス]]", "[[VPC とネットワークの基礎]]"]
 sources:
   - IAM ユーザーガイド（ポリシーの評価ロジック）
   - IAM ユーザーガイド（クロスアカウントのアクセス）
   - AWS STS ユーザーガイド（一時認証情報の有効期限）
 ---
 
-# AWS の IAM と権限の仕組み
+# IAM と権限の仕組み
 
 ## ひとことで
 
@@ -140,9 +140,9 @@ B のロールを `AssumeRole` する形なら話が変わる。引き受けた�
 
 ## 関連ノート
 
-- [[AWS のマルチアカウントのガバナンス]] — SCP・RCP・Control Tower との関係
-- [[AWS の VPC とネットワークの基礎]] — 権限で止めるのか経路で止めるのか
-- [[AWS のつなぎ方の選択]] — ネットワーク側の境界
+- [[マルチアカウントのガバナンス]] — SCP・RCP・Control Tower との関係
+- [[VPC とネットワークの基礎]] — 権限で止めるのか経路で止めるのか
+- [[つなぎ方の選択]] — ネットワーク側の境界
 
 ## 出典
 

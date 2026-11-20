@@ -1,5 +1,5 @@
 ---
-title: AWS の DNS と名前解決
+title: DNS と名前解決
 aliases: [AWS の DNS と名前解決, Route 53 Resolver, プライベートホストゾーン, 名前解決, DNS 転送, Resolver エンドポイント]
 domain: web
 tags: [aws, dns, route53, resolver, hybrid, private-hosted-zone]
@@ -7,13 +7,13 @@ created: 2026-11-14
 updated: 2026-11-15
 status: growing
 prerequisites: [DNS の仕組み, VPC の基礎, 再帰問い合わせと転送, パブリック DNS とプライベート DNS の違い]
-related: ["[[AWS の VPC とネットワークの基礎]]", "[[AWS のつなぎ方の選択]]"]
+related: ["[[VPC とネットワークの基礎]]", "[[つなぎ方の選択]]"]
 sources:
   - Route 53 開発者ガイド（プライベートホストゾーンの考慮事項）
   - Amazon VPC ユーザーガイド（VPC の DNS 属性）
 ---
 
-# AWS の DNS と名前解決
+# DNS と名前解決
 
 ## ひとことで
 
@@ -110,8 +110,8 @@ DHCP オプションセットを書き換えて、VPC 内の DNS をオンプレ
 
 ## 関連ノート
 
-- [[AWS の VPC とネットワークの基礎]] — サブネットと経路の前提
-- [[AWS のつなぎ方の選択]] — オンプレとつなぐ物理的な経路
+- [[VPC とネットワークの基礎]] — サブネットと経路の前提
+- [[つなぎ方の選択]] — オンプレとつなぐ物理的な経路
 
 ## 出典
 
