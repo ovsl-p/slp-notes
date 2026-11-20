@@ -12,6 +12,7 @@ sources:
   - https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
   - https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
   - https://docs.aws.amazon.com/bedrock/latest/userguide/kb-build-managed.html
+  - https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-sync.html
   - https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-cross-account.html
   - https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html
   - https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html
@@ -89,7 +90,9 @@ VPC から閉域で呼ぶときは、インターフェースエンドポイン�
 
 基盤モデルが答えられるのは、学習した知識の範囲だけである。社内文書の内容を答えさせたいときは、質問のたびに関連する文書を検索し、その本文をプロンプトに足してから生成させる。この手法を RAG と呼ぶ。
 
-取り込みは、データソースの解析と分割、埋め込みモデルによるベクトル化、ベクトルストアへの保存、同期の順に進む。データソースを変えたら再同期する。同期しないと、古い内容のまま答え続ける。
+取り込みは、データソースの解析と分割、埋め込みモデルによるベクトル化、ベクトルストアへの保存、同期の順に進む。同期は差分だけを処理するので、2回目以降は変更のあった文書だけが対象になる。
+
+再同期の既定はオンデマンドで、内容を変えたら自分で同期を開始する。止めたままにすると、古い内容のまま答え続ける。マネージドナレッジベースのコネクタには同期スケジュールがあり、毎日、毎週、毎月から選べる。スケジュールを設定すれば、変更が自動で反映される。
 
 ナレッジベースには2種類ある。マネージドナレッジベースは、取り込みから検索までの基盤を Bedrock が持つ。S3、SharePoint、Confluence、Google Drive、OneDrive、Web クローラーのコネクタが用意され、文書ごとのアクセス権で検索結果を絞れる。複数の文書をたどる検索にも対応する。
 
@@ -165,7 +168,7 @@ RAG には2つの検査が使える。文脈グラウンディング検査は、
 
 社内文書の質問応答と、申請の自動化を1つのシステムにまとめる。
 
-1. 社内文書を S3 に置き、マネージドナレッジベースを作って同期する。
+1. 社内文書を S3 に置き、マネージドナレッジベースを作る。同期スケジュールは毎日にしておく。
 2. 質問は Lambda から RetrieveAndGenerate に渡す。根拠にした文書も一緒に返る。
 3. ガードレールを付けて、入力の個人情報と、根拠に無い出力を弾く。
 4. 申請の操作は、既存の申請 API を AgentCore Gateway でツールにする。権限は Identity 経由で渡す。
@@ -174,7 +177,7 @@ RAG には2つの検査が使える。文脈グラウンディング検査は、
 
 ## つまずきポイント
 
-- ナレッジベースに入れれば自動で最新になる。実際は、データソースを変えたあとに再同期が要る。
+- ナレッジベースに入れれば自動で最新になる。実際は、同期の既定がオンデマンドなので、マネージドのコネクタでスケジュールを設定しない限り古い内容のまま残る。
 - Bedrock があれば SageMaker AI は不要。実際は、自前のモデルや独自コンテナのホスティングは SageMaker AI が担う。
 - 新しいエージェントは Bedrock Agents で作る。実際は Agents Classic として新規受付が終わっており、これからは AgentCore か、任意のフレームワークと Runtime で作る。
 - モデルの利用許可はリージョンで1回取れば足りる。実際は、アカウントとリージョンの組ごとに要る。
@@ -200,6 +203,7 @@ RAG には2つの検査が使える。文脈グラウンディング検査は、
 - https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
 - https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
 - https://docs.aws.amazon.com/bedrock/latest/userguide/kb-build-managed.html
+- https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-sync.html
 - https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-cross-account.html
 - https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html
 - https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html
