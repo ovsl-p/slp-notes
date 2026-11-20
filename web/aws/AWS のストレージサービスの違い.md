@@ -4,7 +4,7 @@ aliases: [AWS のストレージサービスの違い, S3, EBS, EFS, FSx, Storag
 domain: web
 tags: [aws, storage, s3, ebs, efs, fsx, storage-gateway, sap-c03]
 created: 2026-11-16
-updated: 2026-11-17
+updated: 2026-11-20
 status: growing
 prerequisites: [IP アドレスと CIDR, 共有ファイルシステムの考え方]
 related: ["[[AWS の VPC とネットワークの基礎]]", "[[VPC の前提知識]]"]
@@ -107,6 +107,16 @@ AWS Backup は、EBS、EFS、RDS、DynamoDB、FSx などのバックアップを
 
 DataSync はバックアップの世代を管理しない。AWS Backup は移行の転送には使わない。Snow は運ぶだけで、定期的な保護は別に考える。
 
+### 8. ストレージのコストを下げる
+
+ストレージの費用は、データの使われ方に合わせて安い層へ移すことで下げられる。S3（オブジェクトを保存する AWS の領域）のライフサイクルポリシーは、時間がたったオブジェクトを安いクラスへ自動で移す仕組みだ。ただし、取り出しに料金がかかるクラスや最低保存期間があるクラスがあり、移す前に確認が要る。
+
+アクセス頻度が読めないデータには S3 Intelligent-Tiering が向く。監視の料金がかかり、小さいオブジェクトが多いと割高になりうる。
+
+EBS（EC2 に付ける仮想ディスク）では gp3 が gp2 より GiB あたりの単価が20%安い。gp3 は容量と性能を切り離して設定でき、3,000 IOPS（1秒あたりの読み書き回数）と 125 MiB/s はストレージの料金に含まれる。EBS のスナップショットは増分で、変わった部分だけが保存される。
+
+EFS にもライフサイクルがあり、使われないファイルを安いストレージクラスへ移せる。バックアップは AWS Backup で保持期間を決め、Data Lifecycle Manager でスナップショットの作成と削除を自動化する。
+
 ## 具体例・コード
 
 設問の読み方の例。
@@ -124,6 +134,9 @@ DataSync はバックアップの世代を管理しない。AWS Backup は移行
 - One Zone-IA を、Standard-IA より壊れやすいと思う。設計上の耐久性の数字は同じで、AZ が失われると読めなくなる点が違う。
 - EFS を Windows で使えると思う。SMB が必要なら FSx for Windows。
 
+- 「gp3 の IOPS を上げるには、容量を増やす必要がある」は間違い。gp3 は容量と性能を切り離して設定でき、3,000 IOPS と 125 MiB/s まではストレージ料金に含まれる。
+- 「EBS のスナップショットは毎回すべてのデータを保存する」は間違い。増分で、前回から変わった部分だけを保存する。
+
 ## 疑問・TODO
 
 - [ ] S3 の耐久性と可用性（99.99% など）の違いを、公式の表で確かめる
@@ -135,6 +148,8 @@ DataSync はバックアップの世代を管理しない。AWS Backup は移行
 - [[AWS の VPC とネットワークの基礎]] — EFS のマウントターゲットは VPC のサブネットに置く
 - [[VPC の前提知識]] — 共有先の IP と到達性
 
+- [[AWS のコストを下げる購入とサイジング]] — コンピュート側の購入オプションとの違い
+
 ## 出典
 
 - Amazon S3 ユーザーガイド: ストレージクラス、耐久性
@@ -142,3 +157,8 @@ DataSync はバックアップの世代を管理しない。AWS Backup は移行
 - Amazon EFS ユーザーガイド
 - Amazon FSx の各ドキュメント
 - AWS Storage Gateway ユーザーガイド
+- https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.md
+- https://aws.amazon.com/s3/pricing/
+- https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.md
+- https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.md
+- https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.md

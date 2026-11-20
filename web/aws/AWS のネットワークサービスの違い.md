@@ -4,7 +4,7 @@ aliases: [AWS のネットワークサービスの違い, CloudFront, Global Acc
 domain: web
 tags: [aws, network, cloudfront, global-accelerator, route53, transit-gateway, direct-connect, sap-c03]
 created: 2026-11-16
-updated: 2026-11-17
+updated: 2026-11-20
 status: growing
 prerequisites: [IP アドレスと CIDR, DNS の仕組み, ロードバランサの層（L4 と L7）]
 related: ["[[AWS の VPC とネットワークの基礎]]", "[[AWS の DNS と名前解決]]", "[[AWS のつなぎ方の選択]]", "[[AWS のロードバランサの使い分け]]", "[[VPC の前提知識]]"]
@@ -84,6 +84,24 @@ PrivateLink は経路を流さず、特定のサービスだけを公開する�
 4. 帯域と遅延の安定が要る → Direct Connect、急ぎで安く → VPN
 5. 特定のサービスだけ見せる → PrivateLink
 
+### 6. データ転送のコスト
+
+AWS のデータ転送は、受信は無料で送信は課金されるのが基本の原則である。設計では、データがどの経路で外に出るかを先に確認する。
+
+| サービス | 課金される項目 | 補足 |
+|---|---|---|
+| CloudFront | 利用者へ配信するデータ転送料金 | オリジン（配信元のサーバー）からの取得は別に課金される |
+| ゲートウェイエンドポイント | 追加料金なし | S3 と DynamoDB 向けの、VPC 内から使う閉じた経路 |
+| インターフェースエンドポイント | AZ ごとの時間課金と、流した GB 課金 | PrivateLink を使う接続点 |
+| NAT ゲートウェイ | 設置時間の課金と、通したデータ量の課金 | プライベートサブネットから外部へ出る変換装置 |
+| Transit Gateway | アタッチ時間の課金と、流したデータ量の課金 | VPC などを集約する中継点 |
+
+CloudFront では、利用者までの配信を CloudFront のデータ転送料金で払う。オリジンからの取得は別に課金される。Origin Shield（オリジン手前のキャッシュ層）を挟むと、オリジンへの取得をまとめられる。ただし Shield 自体の料金が加わる。
+
+AZ（アベイラビリティゾーン）をまたぐ転送は課金される。同じ AZ 内なら課金されない。AZ を分ける設計は、可用性と引き換えに転送費が増える。
+
+S3 のクロスリージョンレプリケーションは、リージョン間の転送とレプリケーションのリクエストが課金される。Bedrock のクロスリージョン推論は、別リージョンで処理される。そのため、データの所在地と転送の扱いが変わる。
+
 ## 具体例・コード
 
 グローバル向けの Web サービスの例。
@@ -101,6 +119,10 @@ PrivateLink は経路を流さず、特定のサービスだけを公開する�
 - Route 53 の加重を、障害切り替えの仕組みだと思う。障害時の切り替えはフェイルオーバーで、加重は割合の制御。
 - PrivateLink をピアリングの代わりに、いつでも使えると思う。経路を流すものではないので、通信の向きと用途が違う。
 
+- 「受信は無料だから転送費は考えなくてよい」は間違い。送信側のデータ量が課金対象になるため、外向きの経路を先に確認する必要がある。
+- 「ゲートウェイエンドポイントにも時間課金がかかる」は間違い。S3 と DynamoDB 向けのゲートウェイエンドポイントは追加料金がない。インターフェースエンドポイントとは課金の仕組みが別である。
+- 「AZ を分けても転送費は変わらない」は間違い。AZ をまたぐ転送は課金されるため、可用性を上げるほど転送費が増える。
+
 ## 疑問・TODO
 
 - [ ] CloudFront のキャッシュキーと、Global Accelerator のエンドポイント重みの違いを整理する
@@ -114,6 +136,8 @@ PrivateLink は経路を流さず、特定のサービスだけを公開する�
 - [[AWS のつなぎ方の選択]] — 拠点やサービスをどうつなぐか
 - [[AWS のロードバランサの使い分け]] — ALB・NLB・GWLB の層
 
+- [[AWS のコストを下げる購入とサイジング]] — 転送費は購入オプションとは別の軸で効く
+
 ## 出典
 
 - Amazon CloudFront デベロッパーガイド
@@ -121,3 +145,10 @@ PrivateLink は経路を流さず、特定のサービスだけを公開する�
 - Amazon Route 53 デベロッパーガイド
 - AWS Transit Gateway ユーザーガイド
 - AWS Direct Connect / Site-to-Site VPN ユーザーガイド
+- https://aws.amazon.com/vpc/pricing/
+- https://aws.amazon.com/transit-gateway/pricing/
+- https://aws.amazon.com/privatelink/pricing/
+- https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.md
+- https://aws.amazon.com/cloudfront/pricing/
+- https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html
+- https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.md

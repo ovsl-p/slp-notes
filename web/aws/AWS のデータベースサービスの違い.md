@@ -4,7 +4,7 @@ aliases: [AWS のデータベースサービスの違い, RDS, Aurora, DynamoDB,
 domain: web
 tags: [aws, database, rds, aurora, dynamodb, elasticache, redshift, sap-c03]
 created: 2026-11-16
-updated: 2026-11-17
+updated: 2026-11-20
 status: growing
 prerequisites: [リレーショナルデータベースの基礎（表・キー・トランザクション）, キーバリューの考え方, キャッシュの基本（ヒットとミス）]
 related: ["[[AWS のストレージサービスの違い]]", "[[AWS のネットワークサービスの違い]]", "[[AWS の VPC とネットワークの基礎]]"]
@@ -89,6 +89,16 @@ Redshift Spectrum を使うと、S3 にあるデータを取り込まずに問�
 3. 同じ読み取りを速くしたい → ElastiCache（元の DB は別に残す）
 4. 大量の集計や分析 → Redshift
 
+### 8. データベースのコストを下げる
+
+データベースの費用は、利用の仕方に合う課金モードや構成を選ぶことで下げやすい。DynamoDB（キーと値で扱う NoSQL データベース）には on-demand と provisioned の2つのモードがある。on-demand はリクエストごとに課金され、読み書きの量が予測しにくい場合に向く。provisioned は読み書きの容量を先に決めて払う方式で、量が安定していれば費用を抑えやすい。
+
+RDS では、リザーブド DB インスタンスを使うと常時動く DB の時間単価を下げられる。
+
+Aurora（AWS が開発したクラウド向けの高性能データベース）には Standard と I/O-Optimized の構成がある。Standard は読み取りの I/O 回数（データへのアクセス回数）に応じて課金される。I/O-Optimized は I/O 課金をなくす代わりに単価を上げた構成で、I/O 料金が多い場合は総額が下がりうる。どちらも I/O やストレージの事前確保は要らない。Aurora Serverless は ACU（容量の単位）で容量が伸び縮みし、使った分だけ払う。
+
+バックアップの保持期間を短くすると保存料金は下がるが、戻せる期間も短くなる。
+
 ## 具体例・コード
 
 オンラインストアの例。
@@ -106,6 +116,9 @@ Redshift Spectrum を使うと、S3 にあるデータを取り込まずに問�
 - ElastiCache を、データの保管場所だと思う。キャッシュは消えることを前提にする。
 - Redshift を、業務の更新に使えると思う。分析向けで、1行ずつの更新には向かない。
 
+- 「Aurora は I/O-Optimized にすれば必ず安い」は間違い。I/O が少ない workload では、I/O 課金のある Standard の方が安くなる。
+- 「DynamoDB のモードは作り直さないと変えられない」は間違い。on-demand と provisioned は切り替えられる。
+
 ## 疑問・TODO
 
 - [ ] RDS のマルチ AZ DB クラスターと、マルチ AZ DB インスタンスの違いを公式の表で確かめる
@@ -118,6 +131,8 @@ Redshift Spectrum を使うと、S3 にあるデータを取り込まずに問�
 - [[AWS のネットワークサービスの違い]] — DB への経路と名前解決
 - [[AWS の VPC とネットワークの基礎]] — DB を置くサブネットと到達性
 
+- [[AWS のコストを下げる購入とサイジング]] — コンピュート側の購入オプションとの違い
+
 ## 出典
 
 - Amazon RDS ユーザーガイド
@@ -125,3 +140,6 @@ Redshift Spectrum を使うと、S3 にあるデータを取り込まずに問�
 - Amazon DynamoDB デベロッパーガイド
 - Amazon ElastiCache ユーザーガイド
 - Amazon Redshift 管理ガイド
+- https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.md
+- https://docs.aws.amazon.com/rds/latest/auroraextendedcontent/aurora-features-cost-effective.md
+- https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.md
