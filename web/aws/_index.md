@@ -22,3 +22,5 @@
 - [[AWS の監査証拠の提出]] — Artifact（AWS 基盤の証拠）と Audit Manager（自分の利用の証拠）を、証拠の出どころで分ける
 - [[AWS の AI サービスの使い分け]] — Bedrock・SageMaker AI・組み込み AI・ナレッジベース（RAG）・AgentCore を、何を選ぶ問題かで分ける
 - [[AWS の責任ある AI の統制]] — Guardrails（入出力の内容）・AgentCore Identity（実行権限）・Step Functions（人の承認）を、どこで止めるかで分ける
+- [[AWS のコストを下げる購入とサイジング]] — オンデマンド・Savings Plans・RI・Spot を、そのコンピュートをいつまで確実に使うかで分ける
+- [[AWS のコストの配分と可視化]] — タグ・Cost Categories・CUR 2.0・Budgets で、誰の支出かを説明できる形にする
