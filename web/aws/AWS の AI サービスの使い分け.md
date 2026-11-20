@@ -97,7 +97,7 @@ VPC から閉域で呼ぶときは、インターフェースエンドポイン�
 
 ナレッジベースには2種類ある。マネージドナレッジベースは、取り込みから検索までの基盤を Bedrock が持つ。S3、SharePoint、Confluence、Google Drive、OneDrive、Web クローラーのコネクタが用意され、文書ごとのアクセス権で検索結果を絞れる。複数の文書をたどる検索にも対応する。
 
-カスタマーマネージドでは、ベクトルストアを自分で選んで運用する。ナレッジベースの保存先にできるのは、OpenSearch Service（マネージドクラスターと Serverless）、Aurora PostgreSQL（pgvector）、S3 Vectors、Neptune Analytics（GraphRAG）、Pinecone、Redis Enterprise Cloud、MongoDB Atlas である。RDS for PostgreSQL、MemoryDB、DocumentDB は使えず、ナレッジベースを挟まず自前で RAG を組むときの選択肢になる。
+カスタマーマネージドでは、ベクトルストアを自分で選んで運用する。ナレッジベースの保存先にできるのは、OpenSearch Service（マネージドクラスターと Serverless）、Aurora PostgreSQL（pgvector）、S3 Vectors、Neptune Analytics（GraphRAG）、Pinecone、Redis Enterprise Cloud、MongoDB Atlas である。RDS for PostgreSQL、MemoryDB、DocumentDB は使えず、ナレッジベースを挟まず自前で RAG を組むときに選ぶ。
 
 呼び出しは Retrieve と RetrieveAndGenerate に分かれる。Retrieve は検索結果だけを返すので、自分のプロンプトで加工したいときに使う。RetrieveAndGenerate は、検索から生成までを1回で済ませる。
 
