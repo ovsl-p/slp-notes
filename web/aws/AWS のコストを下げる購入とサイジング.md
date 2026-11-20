@@ -11,6 +11,7 @@ related: ["[[AWS のコンピューティングサービスの違い]]", "[[AWS 
 sources:
   - https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html
   - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html
+  - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/reserved-instances-scope.html
   - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html
   - https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html
   - https://aws.amazon.com/step-functions/pricing/
@@ -56,7 +57,7 @@ AWS の料金は、使った量と時間に対して課金される。同じ処�
 
 Savings Plans は、**コミット額**を時間あたりの金額で決める。インスタンスの台数や型を決める方式ではない。Compute Savings Plans は、EC2 のインスタンスファミリー、サイズ、OS、テナンシー、リージョンを問わず適用される。Fargate と Lambda の利用にも効く。SageMaker AI のインスタンス利用には、SageMaker AI Savings Plans が割引を適用する。
 
-Reserved Instances は、特定のインスタンス構成へのコミットである。物理的なインスタンスを確保する仕組みではなく、請求上の割引として働く。柔軟性の面で Savings Plans が優れるため、AWS は Savings Plans の利用を推奨している。
+Reserved Instances は、特定のインスタンス構成へのコミットである。物理的なインスタンスを確保する仕組みではなく、請求上の割引として働く。ただし AZ を指定したゾーンの RI は、その AZ の容量予約を伴う。リージョンの RI は割引だけで、容量は確保しない。柔軟性の面で Savings Plans が優れるため、AWS は Savings Plans の利用を推奨している。
 
 Spot は、EC2 の余剰容量をオンデマンドより安く使う仕組みである。**中断**されることがあるため、途中で止まっても問題のない処理に使う。Spot 価格はインスタンスタイプと AZ ごとに設定され、需給によって徐々に変動する。
 
@@ -73,9 +74,11 @@ Step Functions の Standard ワークフローは、状態遷移の数で課金�
 Step Functions の Express ワークフローは、リクエスト数と実行時間で課金される。実行時間は100ms 単位に切り上げられ、メモリ使用量も料金の要素になる。
 
 ```
-Standard の概算 = 1回の実行の遷移数 × 実行回数
-Express の概算 = リクエスト数 + 実行時間（100ms 単位）× メモリ要素
+Standard の概算 = (1回の実行の遷移数 × 実行回数 − 4,000) × 遷移単価
+Express の概算 = リクエスト数 × リクエスト単価 + 実行時間（100ms 切り上げ）× メモリ（GB）× GB 秒単価
 ```
+
+Express の2つの項は単位が違う。リクエストは回数、実行時間は GB 秒で数えるので、別々に計算して足す。
 
 どちらが安いかは、この式に実際の値を入れて比べるまで決まらない。
 
@@ -85,7 +88,7 @@ Graviton は、AWS がクラウド workload に対して最も良い価格性能
 
 ### 4. AI/ML のコスト（バッチ推論）
 
-Bedrock のバッチ推論は、オンデマンドより50%安い。結果をその場で返す必要がない処理に向く。
+Bedrock のバッチ推論は、対応するモデルならオンデマンドの50%の価格で使える。結果をその場で返す必要がない処理に向く。
 
 スループットを固定する Provisioned Throughput は、モデルユニット単位で払う方式になる。詳細は [[AWS の AI サービスの使い分け]] で扱う。
 
@@ -103,7 +106,7 @@ Bedrock のバッチ推論は、オンデマンドより50%安い。結果をそ
 
 ## つまずきポイント
 
-- 「RI は物理的なインスタンスを予約する仕組みである」は間違い。RI は請求上の割引であり、物理的な容量を確保するものではない。
+- 「RI は物理的なインスタンスを予約する仕組みである」は間違い。RI は請求上の割引だが、ゾーンの RI は容量予約を伴う。リージョンの RI は容量を確保しない。
 - 「Compute Savings Plans はインスタンスタイプとリージョンを指定して買う」は間違い。ファミリー、サイズ、OS、テナンシー、リージョンを問わず適用され、Fargate と Lambda にも効く。
 - 「Spot は割引が大きいので本番の API に使える」は間違い。中断されることがあるため、中断を許容できる処理に限って使う。
 - 「Spot の価格は一定の割引率で固定されている」は間違い。価格はインスタンスタイプと AZ ごとに設定され、需給で徐々に変動する。
@@ -127,6 +130,7 @@ Bedrock のバッチ推論は、オンデマンドより50%安い。結果をそ
 
 - https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html
 - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html
+- https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/reserved-instances-scope.html
 - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html
 - https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html
 - https://aws.amazon.com/step-functions/pricing/

@@ -31,6 +31,7 @@ sources:
   - https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html
   - https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
   - https://aws.amazon.com/bedrock/pricing/
+  - https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.md
   - https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
 ---
 
@@ -78,9 +79,9 @@ sources:
 
 Bedrock は、複数の提供元の基盤モデルを API 経由で使うフルマネージドのサービスである。100以上のモデルから選べ、GPU やサーバーを持たなくてよい。呼び出しには `bedrock-runtime` の Converse と InvokeModel を使う。Converse はモデルごとの差分を吸収する共通形式で、InvokeModel はモデル固有の形式を受け付ける。
 
-課金はトークン単位で決まる。大量の入力をまとめて処理するバッチ推論は、オンデマンドより50%安い。処理能力を固定したいときは、Provisioned Throughput をモデルユニット単位で購入する。コミットなし、1か月、6か月から選び、期間が長いほど時間単価が下がる。
+課金はトークン単位で決まる。大量の入力をまとめて処理するバッチ推論は、対応するモデルならオンデマンドの50%の価格で使える。処理能力を固定したいときは、Provisioned Throughput をモデルユニット単位で購入する。コミットなし、1か月、6か月から選び、期間が長いほど時間単価が下がる。
 
-モデルの利用許可は、アカウントとリージョンの組ごとに有効化する。多くは AWS Marketplace の権限があれば、最初から使える。地理単位かグローバルの推論プロファイルを使うと、複数リージョンの計算資源でスループットを上げられる。データが別リージョンに出る点は、設計で確かめる。
+サーバーレスのモデルは、対応している商用リージョンなら既定で使える。リージョンごとに有効化する手順はない。初回の呼び出しで AWS Marketplace の購読が自動で始まるので、呼ぶ IAM 主体に `aws-marketplace:Subscribe` などの権限が要る。許可はアカウントごとに別で、Anthropic の Claude Opus 4.7 より前のモデルは初回利用フォームの提出を求められる。地理単位かグローバルの推論プロファイルを使うと、複数リージョンの計算資源でスループットを上げられる。データが別リージョンに出る点は、設計で確かめる。
 
 VPC から閉域で呼ぶときは、インターフェースエンドポイント（AWS PrivateLink）を作る。エンドポイントポリシーで、呼べる操作と相手を絞れる。
 
@@ -96,7 +97,7 @@ VPC から閉域で呼ぶときは、インターフェースエンドポイン�
 
 ナレッジベースには2種類ある。マネージドナレッジベースは、取り込みから検索までの基盤を Bedrock が持つ。S3、SharePoint、Confluence、Google Drive、OneDrive、Web クローラーのコネクタが用意され、文書ごとのアクセス権で検索結果を絞れる。複数の文書をたどる検索にも対応する。
 
-カスタマーマネージドでは、ベクトルストアを自分で選んで運用する。OpenSearch Service、Aurora や RDS の PostgreSQL（pgvector）、Neptune Analytics、MemoryDB、DocumentDB、S3 Vectors が候補に挙がる。
+カスタマーマネージドでは、ベクトルストアを自分で選んで運用する。ナレッジベースの保存先にできるのは、OpenSearch Service（マネージドクラスターと Serverless）、Aurora PostgreSQL（pgvector）、S3 Vectors、Neptune Analytics（GraphRAG）、Pinecone、Redis Enterprise Cloud、MongoDB Atlas である。RDS for PostgreSQL、MemoryDB、DocumentDB は使えず、ナレッジベースを挟まず自前で RAG を組むときの選択肢になる。
 
 呼び出しは Retrieve と RetrieveAndGenerate に分かれる。Retrieve は検索結果だけを返すので、自分のプロンプトで加工したいときに使う。RetrieveAndGenerate は、検索から生成までを1回で済ませる。
 
@@ -144,7 +145,7 @@ SageMaker AI は、機械学習モデルの学習と推論のための基盤で�
 - Translate: 言語の翻訳
 - Lex: 対話ボットの意図理解
 - Personalize: 推薦
-- Forecast: 時系列の需要予測
+- Forecast: 時系列の需要予測（新規の受付は終了している）
 
 指示を変えながら自由な文章を作らせたいなら、基盤モデル側に移る。
 
@@ -158,7 +159,7 @@ RAG には2つの検査が使える。文脈グラウンディング検査は、
 
 ### 8. マルチアカウントに置く
 
-モデルの利用許可は、アカウントとリージョンの組で決まる。1つのアカウントで有効化しても、他には広がらない。AI 用のアカウントに寄せるか、各アカウントで有効化するかを先に決める。
+モデルの利用許可は、アカウントごとに決まる。サーバーレスのモデルは商用リージョンなら既定で使え、リージョンごとに有効化する作業はない。例外は Anthropic の Claude Opus 4.7 より前のモデルで、初回利用フォームの提出が要る。組織なら管理アカウントで1回出せば、配下のアカウントに引き継がれる。AI 用のアカウントに寄せるか、各アカウントで使うかを先に決める。
 
 寄せる場合は、インターフェースエンドポイントとエンドポイントポリシーで、呼べるアカウントと操作を絞る。ナレッジベースは、マネージド型ならリソースポリシーで共有できる。
 
@@ -180,7 +181,7 @@ RAG には2つの検査が使える。文脈グラウンディング検査は、
 - 「ナレッジベースに入れれば自動で最新になる」は間違い。同期の既定はオンデマンドで、マネージドのコネクタでスケジュールを設定しない限り、古い内容のまま残る。
 - 「Bedrock があれば SageMaker AI は要らない」は間違い。自前のモデルや独自コンテナのホスティングは SageMaker AI が担う。
 - 「新しいエージェントは Bedrock Agents で作る」は間違い。Agents Classic は新規受付を終えており、これからは AgentCore か、任意のフレームワークと Runtime で作る。
-- 「モデルの利用許可はリージョンで1回取れば足りる」は間違い。アカウントとリージョンの組ごとに要る。
+- 「モデルの利用許可はリージョンごとに申請する」は間違い。商用リージョンのサーバーレスのモデルは既定で使え、手動で有効化するのは GovCloud だけである。
 - 「何 GB のデータでも同期呼び出しで渡せる」は間違い。リアルタイム推論には入力の上限があり、大きい入力は非同期推論かバッチ変換に回す。
 - 「ガードレールを有効にすれば全リクエストに自動で効く」は間違い。リクエストで指定するか、ApplyGuardrail を自分で呼ぶ。
 
@@ -222,4 +223,5 @@ RAG には2つの検査が使える。文脈グラウンディング検査は、
 - https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html
 - https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
 - https://aws.amazon.com/bedrock/pricing/
+  - https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.md
 - https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
