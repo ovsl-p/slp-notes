@@ -4,7 +4,7 @@ aliases: [AWS の AI サービスの使い分け, AWS の AI と ML の違い, B
 domain: web
 tags: [aws, ai, generative-ai, bedrock, sagemaker, rag, agents, agentcore, guardrails, sap-c03]
 created: 2026-11-20
-updated: 2026-11-20
+updated: 2026-11-21
 status: growing
 prerequisites: [基盤モデルとトークン, ベクトル検索]
 related: ["[[疎結合の部品の違い]]", "[[コンピューティングサービスの違い]]", "[[IAM と権限の仕組み]]", "[[暗号化と秘密情報の管理]]"]
@@ -223,5 +223,5 @@ RAG には2つの検査が使える。文脈グラウンディング検査は、
 - https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html
 - https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
 - https://aws.amazon.com/bedrock/pricing/
-  - https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.md
+- https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.md
 - https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html
