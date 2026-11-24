@@ -1,5 +1,5 @@
 ---
-title: AWS の VPC とネットワークの基礎
+title: VPC とネットワークの基礎
 aliases: [AWS の VPC とネットワークの基礎, VPC, サブネット, ルートテーブル, セキュリティグループ, NAT ゲートウェイ, VPC エンドポイント]
 domain: web
 tags: [aws, network, vpc, subnet, routing, security-group, nat]
@@ -7,13 +7,13 @@ created: 2026-11-14
 updated: 2026-11-15
 status: growing
 prerequisites: [IP アドレスと CIDR, ルーティングの基礎, NAT の考え方, DNS の基礎]
-related: ["[[VPC の前提知識]]", "[[AWS の DNS と名前解決]]", "[[AWS のつなぎ方の選択]]", "[[Kubernetes の概要]]"]
+related: ["[[VPC の前提知識]]", "[[DNS と名前解決]]", "[[つなぎ方の選択]]", "[[Kubernetes の概要]]"]
 sources:
   - Amazon VPC ユーザーガイド（https://docs.aws.amazon.com/vpc/latest/userguide/）
   - AWS Well-Architected フレームワーク（信頼性・セキュリティの柱）
 ---
 
-# AWS の VPC とネットワークの基礎
+# VPC とネットワークの基礎
 
 ## ひとことで
 
@@ -34,7 +34,7 @@ IP アドレスと CIDR、ルーティング、NAT、DNS の基礎は [[VPC の�
 | IP アドレスと CIDR | VPC とサブネットは CIDR で切る。つなぐ相手と範囲が重複すると、経路でつなげない |
 | ルーティング | 「どこ宛のパケットをどこへ送るか」の表。VPC の要 |
 | NAT の考え方 | プライベートな IP のまま外に出る仕組み |
-| DNS の基礎 | VPC の中にも名前解決の仕組みがある（[[AWS の DNS と名前解決]]） |
+| DNS の基礎 | VPC の中にも名前解決の仕組みがある（[[DNS と名前解決]]） |
 
 ## 本体の解説
 
@@ -86,7 +86,7 @@ ACL のルールは番号の小さい順に評価され、最初に一致した�
 
 VPC には、CIDR の先頭アドレスに +2 したアドレス（10.0.0.0/16 なら 10.0.0.2）に Route 53 Resolver がいる。+1 は VPC のルーター用で、DNS ではない。この Resolver は VPC の中からしか使えない。
 
-詳細は [[AWS の DNS と名前解決]] に分けた。
+詳細は [[DNS と名前解決]] に分けた。
 
 ### 6. 料金で効くところ
 
@@ -120,9 +120,9 @@ NAT ゲートウェイには、時間あたりの料金と、処理したデー�
 
 ## 関連ノート
 
-- [[AWS の DNS と名前解決]] — VPC 内の名前解決と、オンプレとの連携
-- [[AWS のつなぎ方の選択]] — VPC 同士やオンプレをつなぐ手段
-- [[AWS のロードバランサの使い分け]] — 受け口をどこに置くか
+- [[DNS と名前解決]] — VPC 内の名前解決と、オンプレとの連携
+- [[つなぎ方の選択]] — VPC 同士やオンプレをつなぐ手段
+- [[ロードバランサの使い分け]] — 受け口をどこに置くか
 - [[Kubernetes の概要]] — Pod が載るネットワークとしての VPC
 
 ## 出典
