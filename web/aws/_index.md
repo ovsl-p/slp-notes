@@ -39,3 +39,7 @@
 
 - [[コストを下げる購入とサイジング]] — オンデマンド・Savings Plans・RI・Spot を、そのコンピュートをいつまで確実に使うかで分ける
 - [[コストの配分と可視化]] — タグ・Cost Categories・CUR 2.0・Budgets で、誰の支出かを説明できる形にする
+
+## resilience
+
+- [[クラウド移行の戦略と道具]] — 7R と、MGN・DMS・DataSync・AWS Transform を、移す／残す／やめる／作り直すの判断で分ける
