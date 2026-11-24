@@ -1,11 +1,4 @@
 {
-<<<<<<< HEAD
   "showRibbon": true,
-  "accentColor": "#5cbaf5",
-  "theme": "obsidian",
-=======
-  "showRibbon": false,
-  "theme": "moonstone",
->>>>>>> origin/main
   "cssTheme": "Minimal"
 }
