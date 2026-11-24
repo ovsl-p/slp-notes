@@ -24,6 +24,7 @@
 
 ## compute-data
 
+- [[データレイクと分析の部品の違い]] — S3・Glue Data Catalog・Lake Formation・Athena・Redshift・EMR・Kinesis を、置く／台帳／権限／問い合わせる／流すで分ける
 - [[コンピューティングサービスの違い]] — EC2・Auto Scaling・Lambda・ECS/EKS・Fargate・Beanstalk を管理の範囲と処理の時間で分ける
 - [[ストレージサービスの違い]] — S3・EBS・EFS・FSx・Storage Gateway を見せ方（オブジェクト／ブロック／ファイル）で分ける
 - [[データベースサービスの違い]] — RDS・Aurora・DynamoDB・ElastiCache・Redshift を形と目的で分ける
