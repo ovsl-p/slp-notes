@@ -1,18 +1,9 @@
-# Obsidian（端末ごとに変わるものは共有しない）
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-.obsidian/cache
-.trash/
+# Obsidian（端末ごとに変わる設定は共有しない。共有するとコンフリクトする）
+.obsidian/
 
-# 端末ごと（有効なプラグイン一覧・プラグインの認証情報）
-.obsidian/community-plugins.json
-.obsidian/plugins/obsidian-git/data.json
+# Obsidian のゴミ箱
+.trash/
 
 # OS
 .DS_Store
 Thumbs.db
-
-/.obsidian
-/.obsidian
-/.obsidian
-/.obsidian
