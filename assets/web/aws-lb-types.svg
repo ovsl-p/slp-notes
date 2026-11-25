@@ -15,7 +15,7 @@
 <rect x="320" y="106" width="260" height="132" rx="4" fill="#ffffff" stroke="#9bbf9f" stroke-width="1.2"/>
 <text x="334" y="132" font-size="11" fill="#333" text-anchor="start">・超低遅延、UDP も通す</text>
 <text x="334" y="158" font-size="11" fill="#333" text-anchor="start">・AZ ごとに固定 IP（EIP 可）</text>
-<text x="334" y="184" font-size="11" fill="#333" text-anchor="start">・PrivateLink の前段</text>
+<text x="334" y="184" font-size="11" fill="#333" text-anchor="start">・PrivateLink の前段（NLB/GWLB）</text>
 <rect x="600" y="64" width="260" height="42" rx="4" fill="#f7f4fa" stroke="#b6a7cf" stroke-width="1.2"/>
 <text x="614" y="92" font-size="14" fill="#1f2b36" text-anchor="start">GWLB</text>
 <text x="750" y="92" font-size="11.5" fill="#4a5a6a" text-anchor="start">L3（IP パケット）</text>
@@ -41,5 +41,5 @@
 <line x1="420" y1="363" x2="460" y2="363" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
 <line x1="600" y1="363" x2="640" y2="363" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
 <text x="56" y="410" font-size="11" fill="#5a5a5a" text-anchor="start">戻りの経路も同じエンドポイントを通す。行きと帰りがずれると、機器が通信を落とす。</text>
-<text x="40" y="450" font-size="12" fill="#333" text-anchor="start">PrivateLink でサービスを公開するときの前段は NLB。ALB は直接つなげない（NLB のターゲットに ALB を入れる）。</text>
+<text x="40" y="450" font-size="12" fill="#333" text-anchor="start">PrivateLink の前段は NLB か GWLB。ALB は NLB のターゲットに入れる。単体リソースは resource gateway でも公開できる。</text>
 </svg>

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="460" viewBox="0 0 900 460" font-family="Noto Sans JP,Helvetica,sans-serif">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7b"/></marker></defs>
 <rect width="900" height="460" fill="#fdfdfb"/>
-<text x="40" y="36" font-size="15.5" fill="#111" text-anchor="start">権限の判定 — 拒否が最優先、上限は掛け算、書いていないことは拒否</text>
+<text x="40" y="36" font-size="15.5" fill="#111" text-anchor="start">権限の判定 — 拒否が最優先、上限はすべて満たす範囲、書いていないことは拒否</text>
 <rect x="40" y="64" width="420" height="300" rx="6" fill="#ffffff" stroke="#dbe3ea" stroke-width="1.2"/>
 <text x="56" y="88" font-size="13" fill="#1f3b52" text-anchor="start">① 1つのリクエストの判定順</text>
 <rect x="96" y="100" width="230" height="42" rx="4" fill="#fdf1f1" stroke="#d09a9a" stroke-width="1.2"/>
