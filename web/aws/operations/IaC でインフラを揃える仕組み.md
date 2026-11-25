@@ -16,6 +16,7 @@ sources:
   - https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/what-is-cloudformation-hooks.html
   - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.md
   - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.md
+  - https://docs.aws.amazon.com/cdk/v2/guide/languages.md
 ---
 
 # IaC でインフラを揃える仕組み
@@ -57,7 +58,7 @@ IaC は、インフラの構成をコードで宣言し、同じ状態を何度�
 
 CloudFormation は宣言型である。CDK はプログラミング言語で書くが、生成物は CloudFormation テンプレートである。そのため、デプロイは宣言型の仕組みに乗る。
 
-CDK は Construct Library（部品）、CLI、スタックとアプリの組み合わせで成り立つ。TypeScript、Python、Java、C#/.NET、Go で書ける。synth でテンプレートを生成し、CloudFormation 経由でデプロイする。
+CDK は Construct Library（部品）、CLI、スタックとアプリの組み合わせで成り立つ。TypeScript、JavaScript、Python、Java、C#/.NET、Go の6言語で書ける。synth でテンプレートを生成し、CloudFormation 経由でデプロイする。
 
 更新の前には変更セットを使う。リソースの置換（再作成）が起きるかを、実行前に確認できる。
 
@@ -82,15 +83,15 @@ Config ルールは止めずに、デプロイ済みのリソースを評価し�
 
 動的参照を使うと、テンプレートに秘密を書かずに済む。値はデプロイ時に取得される。
 
-動的参照には `{{resolve:secretsmanager:...}}` と `{{resolve:ssm-secure:...}}` の2種類の書式がある。パスワードはテンプレートにもパラメータにも平文で置かない。ローテーションは Secrets Manager に任せる。
+動的参照には `{{resolve:ssm:...}}`、`{{resolve:ssm-secure:...}}`、`{{resolve:secretsmanager:...}}` の3種類の書式がある。秘密に使うのは後の2つで、`ssm` は平文のパラメータを読む。パスワードはテンプレートにもパラメータにも平文で置かない。ローテーションは Secrets Manager に任せる。
 
-動的参照は、リソースの主識別子（名前など）には使わない。解決後の値を CloudFormation が平文のまま内部に保持することがあるからだ。
+動的参照は、リソースの主識別子（名前など）には使わない。解決後の平文の値が主識別子に使われ、スタックの出力などに現れることがあるからだ。
 
 鍵と秘密情報の扱いは [[暗号化と秘密情報の管理]] にまとめてある。
 
 ### 4. StackSets で複数アカウント・複数リージョンへ配る
 
-StackSets は、管理アカウントから1つのテンプレートで、複数アカウント・複数リージョンにスタックを作成・更新・削除する。
+StackSets は、管理者アカウントから1つのテンプレートで、複数アカウント・複数リージョンにスタックを作成・更新・削除する。サービス管理モデルなら、Organizations の管理アカウントか、委任された管理者アカウントが管理者になる。
 
 権限モデルは2つある。
 
@@ -120,11 +121,11 @@ Resources:
       MasterUserPassword: '{{resolve:secretsmanager:MySecret:SecretString:password}}'
 ```
 
-CDK では、同じ内容を Construct の組み合わせで書く。synth すると上のテンプレートに近い YAML が出る。
+CDK では、同じ内容を Construct の組み合わせで書く。バケット部分は、synth すると上のテンプレートに近い YAML が出る。`KMS` を選ぶと暗号化キーを新しく作るため、`AWS::KMS::Key` が1つ増える。
 
 ```ts
 const bucket = new s3.Bucket(this, 'Data', {
-  encryption: s3.BucketEncryption.KMS,
+  encryption: s3.BucketEncryption.KMS_MANAGED,
 });
 ```
 
@@ -135,8 +136,8 @@ const bucket = new s3.Bucket(this, 'Data', {
 - 「CDK は命令型だからデプロイも手続き的に動く」は間違い。生成物が CloudFormation テンプレートなので、デプロイは宣言型の仕組みに乗る。
 - 「変更セットを作った時点で、変更は適用される」は間違い。変更セットは影響を見せるだけで、実行を決めるまで適用されない。
 - 「Config ルールで非準拠のデプロイを止められる」は間違い。Config ルールはデプロイ済みのリソースを継続的に評価する。止めるのは合成時なら Aspects、デプロイ時なら Hooks である。
-- 「SCP はテンプレートの中身を検査する」は間違い。SCP はアカウント全体で許可する操作自体を制限する。
-- 「動的参照はリソース名にも使ってよい」は間違い。主識別子に使うと、CloudFormation が平文を内部に保持する場合がある。
+- 「SCP はテンプレートの中身を検査する」は間違い。SCP はメンバーアカウントのプリンシパルに操作の上限をかける。管理アカウントとサービスリンクロールには効かない。
+- 「動的参照はリソース名にも使ってよい」は間違い。主識別子に使うと、平文の値がスタックの出力などに現れることがある。
 - 「StackSets は自己管理の権限モデルでも、新規アカウントに自動で配備できる」は間違い。自動配備は、Organizations と連携するサービス管理の権限モデルでだけ使える。
 
 ## 疑問・TODO
@@ -160,3 +161,4 @@ const bucket = new s3.Bucket(this, 'Data', {
 - https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/what-is-cloudformation-hooks.html
 - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.md
 - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.md
+- https://docs.aws.amazon.com/cdk/v2/guide/languages.md

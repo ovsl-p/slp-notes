@@ -18,6 +18,9 @@ sources:
   - https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-signing.html
   - https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-signing-verification.html
   - https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-how-it-works-conditions.html
+  - https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring-cloudwatch.md
+  - https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-groups-configure-advanced-options.md
+  - https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.md
 ---
 
 # CI/CD パイプラインと DevSecOps
@@ -56,7 +59,7 @@ CodePipeline、CodeBuild、CodeDeploy は役割が分かれている。どの段
 
 CodePipeline は流れの管理役である。リリース手順をステージとアクションでモデル化し、自動で回す。アーティファクトは S3 バケットに置かれ、ステージ間で渡される。ステージ条件を使うと、失敗したときの振る舞いも制御できる。
 
-CodeBuild はビルドの実行役である。フルマネージドで、ソースのコンパイル、単体テスト、デプロイ可能な成果物の作成を行う。言語別のビルド環境が用意されているため、自前のビルドサーバは要らない。必要に応じて自動でスケールし、使ったビルド時間だけ料金がかかる。
+CodeBuild はビルドの実行役である。フルマネージドで、ソースのコンパイル、単体テスト、デプロイ可能な成果物の作成を行う。言語別のビルド環境が用意されているため、自前のビルドサーバは要らない。必要に応じて自動でスケールする。オンデマンドでは、使ったビルド時間だけ料金がかかる。リザーブドキャパシティは別の課金になる。
 
 CodeDeploy は配布の実行役である。EC2・オンプレミス、Lambda、ECS へのデプロイを自動化する。入れ替えの順序や速度は、デプロイ設定で決まる。
 
@@ -74,17 +77,17 @@ EC2/オンプレミスでは、minimum healthy hosts で速度が決まる。こ
 | Canary | Lambda、ECS |
 | Linear | Lambda、ECS |
 
-Canary は、最初に10%だけを新バージョンに流し、5分後に残りを切り替える方式である。Linear は、1分ごとに10%ずつ、流す割合を増やす方式である。
+Canary は、最初に少量だけを新バージョンに流し、待ってから残りを切り替える方式である。Linear は、一定の間隔で少しずつ流す割合を増やす方式である。割合と間隔は、Canary10Percent5Minutes や Linear10PercentEvery1Minute のような定義済みの設定から選び、カスタムもできる。
 
-Blue/Green は、新バージョンを別環境に作ってからトラフィックを切り替える。問題が出たときは、トラフィックを戻すだけで切り戻せる。CodeDeploy は EC2/オンプレミス、ECS、Lambda でこの方式を扱える。
+Blue/Green は、新バージョンを別環境に作ってからトラフィックを切り替える。問題が出たときは、トラフィックを戻すだけで切り戻せる。CodeDeploy は EC2、ECS、Lambda でこの方式を扱える。オンプレミスのインスタンスは Blue/Green に対応せず、インプレースのデプロイだけになる。
 
-デプロイは CloudWatch アラームと紐づけられる。アラームがしきい値を超えると、デプロイが自動で前の状態に戻る。
+デプロイは CloudWatch アラームと紐づけられる。アラームがしきい値を超えると、デプロイは停止する。デプロイグループで自動ロールバックを有効にしていれば、最後に正常だったリビジョンを新しいデプロイとして配り直す。
 
 ### 3. パイプラインにセキュリティ検査と署名を差し込む
 
 検査には Amazon Inspector を使う。ECR のイメージと Lambda 関数の脆弱性を、継続的にスキャンできる。ECR にもイメージスキャン機能が備わっている。
 
-署名には AWS Signer を使う。ECR には署名の方法が2つある。マネージド署名は、署名設定と署名プロファイルを用意しておくと、プッシュ時に自動で署名される。手動署名は、Notation CLI と Signer のプラグインで、プッシュの前に署名する。Lambda のコード署名にも、AWS Signer が使える。
+署名には AWS Signer を使う。ECR には署名の方法が2つある。マネージド署名は、署名設定と署名プロファイルを用意しておくと、プッシュ時に自動で署名される。手動署名は、レジストリへプッシュしたイメージを、ダイジェストを指定して Notation CLI と Signer のプラグインで署名する。Lambda のコード署名にも、AWS Signer が使える。
 
 検証は、動かす場所によって差し込む先が変わる。EKS は admission で、Gatekeeper と Ratify の組み合わせか Kyverno を使う。ECS はサービスのライフサイクルフックから Lambda を呼び、コンテナを起動する前に確かめる。手元で確かめるなら Notation CLI を使う。どちらの場合も、あらかじめ信頼ストアとトラストポリシーを設定しておく。
 
@@ -100,11 +103,11 @@ Blue/Green は、新バージョンを別環境に作ってからトラフィッ
 | On Failure | ステージが失敗したとき | Rollback |
 | On Success | ステージが成功したあと | Rollback か Fail |
 
-ルールには LambdaInvoke と CloudWatchAlarm がある。CloudWatchAlarm のルールは、アラームがしきい値の内側にあれば通過する。On Success にアラームのルールを置いておくと、デプロイ直後に異常が出たときに Rollback まで進められる。
+ルールには LambdaInvoke と CloudWatchAlarm のほか、Commands、DeploymentWindow、VariableCheck などがある。CloudWatchAlarm のルールは、アラームがしきい値の内側にあれば通過する。On Success にアラームのルールを置いておくと、デプロイ直後に異常が出たときに Rollback まで進められる。
 
 ### 5. 複数アカウント・複数リージョンのパイプライン
 
-クロスアカウントのパイプラインでは、成果物の受け渡しに KMS キーと IAM ロールの設定が必要になる。
+クロスアカウントのパイプラインでは、成果物の受け渡しに KMS キーと IAM ロールの設定が必要になる。成果物を持つ S3 バケットのバケットポリシーで配布先アカウントを許可し、KMS キーはキーポリシーと配布先の IAM ポリシーの両方で復号を許可する。ロールは、信頼ポリシー（引き受ける側）と呼び出し側の sts:AssumeRole の許可を、アカウントごとに書く。
 
 アクションが入力として受け取れる成果物は、次のどちらかに限られる。
 
@@ -124,11 +127,11 @@ Source   : GitHub（CodeConnections 経由）
 Build    : CodeBuild（コンパイル、単体テスト、イメージ作成）
 Scan     : Inspector / ECR イメージスキャン
 Sign     : AWS Signer（Notation でイメージに署名）
-Deploy   : CodeDeploy（ECS で Canary、デプロイ時に署名を検証）
-Rollback : CloudWatch アラームで自動ロールバック
+Deploy   : CodeDeploy（ECS で Canary）。署名の検証は、ECS のライフサイクルフックから呼ぶ Lambda で行う
+Rollback : CloudWatch アラームで停止し、自動ロールバックを有効にしていれば戻す
 ```
 
-本番アカウントへ配る場合は、パイプラインのアカウントが成果物を持つ。KMS キーと IAM ロールを設定し、配布先のアクションへ渡す。
+本番アカウントへ配る場合は、パイプラインのアカウントが成果物を持つ。S3 のバケットポリシー、KMS のキーポリシーと配布先の IAM ポリシー、AssumeRole の両側を設定し、配布先のアクションへ渡す。
 
 AI/ML のアプリを評価する工程を挟むなら、Bedrock のモデル評価を使う。詳細は [[AI サービスの使い分け]] にある。
 
@@ -138,7 +141,7 @@ AI/ML のアプリを評価する工程を挟むなら、Bedrock のモデル評
 - 「HalfAtATime や OneAtATime は Lambda でも選べる」は間違い。この2つは EC2/オンプレミス向けで、Lambda と ECS では AllAtOnce、Canary、Linear から選ぶ。
 - 「デプロイ設定を指定しなければ AllAtOnce になる」は間違い。EC2/オンプレミスでは、指定がなければ OneAtATime が使われる。
 - 「別の2アカウント間で成果物を直接渡せる」は間違い。成果物はパイプラインのアカウントを経由する必要があり、KMS キーと IAM ロールの設定も要る。
-- 「ECR のイメージスキャンがあれば、Inspector は不要」は間違い。Inspector は ECR のイメージと Lambda 関数を継続的にスキャンでき、署名は別に AWS Signer で行う。
+- 「ECR のイメージスキャンがあれば、Inspector は不要」は間違い。基本スキャンはプッシュ時の1回だけで、継続的に見るなら拡張スキャン（中身は Inspector）か Inspector を使う。Lambda 関数も Inspector の対象になる。
 - 「CodeCommit は新規利用できない」は間違い。2024年7月25日に新規受付を終了したが、2025年11月25日に新規の提供を再開している。
 
 ## 疑問・TODO
@@ -163,3 +166,6 @@ AI/ML のアプリを評価する工程を挟むなら、Bedrock のモデル評
 - https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-signing.html
 - https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-signing-verification.html
 - https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-how-it-works-conditions.html
+- https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring-cloudwatch.md
+- https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-groups-configure-advanced-options.md
+- https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.md
