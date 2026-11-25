@@ -47,3 +47,4 @@
 - [[バックアップの一元管理と保護の仕組み]] — AWS Backup の集中管理と、Vault Lock・Object Lock・スナップショットロックによる削除・改変の防止
 - [[IaC でインフラを揃える仕組み]] — CloudFormation と CDK、Hooks・Aspects・Config・SCP で止める位置、StackSets での配布
 - [[CI-CD パイプラインと DevSecOps]] — CodePipeline・CodeBuild・CodeDeploy の分担、デプロイ戦略、署名とスキャン、クロスアカウント
+- [[オブザーバビリティの計測と通知]] — CloudWatch・X-Ray・ADOT の分担、Container Insights、クロスアカウントの集約、アラームと自動修復
