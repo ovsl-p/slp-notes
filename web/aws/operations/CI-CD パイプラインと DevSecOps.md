@@ -16,6 +16,8 @@ sources:
   - https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.md
   - https://docs.aws.amazon.com/codecommit/latest/userguide/history.md
   - https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-signing.html
+  - https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-signing-verification.html
+  - https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-how-it-works-conditions.html
 ---
 
 # CI/CD パイプラインと DevSecOps
@@ -82,11 +84,25 @@ Blue/Green は、新バージョンを別環境に作ってからトラフィッ
 
 検査には Amazon Inspector を使う。ECR のイメージと Lambda 関数の脆弱性を、継続的にスキャンできる。ECR にもイメージスキャン機能が備わっている。
 
-署名には AWS Signer を使う。コンテナイメージは Notation で署名し、デプロイ時に検証できる。Lambda のコード署名にも、AWS Signer が使える。
+署名には AWS Signer を使う。ECR には署名の方法が2つある。マネージド署名は、署名設定と署名プロファイルを用意しておくと、プッシュ時に自動で署名される。手動署名は、Notation CLI と Signer のプラグインで、プッシュの前に署名する。Lambda のコード署名にも、AWS Signer が使える。
+
+検証は、動かす場所によって差し込む先が変わる。EKS は admission で、Gatekeeper と Ratify の組み合わせか Kyverno を使う。ECS はサービスのライフサイクルフックから Lambda を呼び、コンテナを起動する前に確かめる。手元で確かめるなら Notation CLI を使う。どちらの場合も、あらかじめ信頼ストアとトラストポリシーを設定しておく。
 
 パイプラインの順序は、ビルド、検査、署名、配布である。検査を通ったものだけに署名し、デプロイ時に署名を検証すれば、未検査や未署名の成果物を本番の手前で止められる。
 
-### 4. 複数アカウント・複数リージョンのパイプライン
+### 4. 止まったときの扱い（ステージ条件）
+
+ステージ条件は、どのタイミングで何を検査し、失敗したらどうするかを決める。置ける場所は3つある。
+
+| 条件 | 走るタイミング | 条件を満たさなかったときの結果 |
+|---|---|---|
+| Entry | ステージに入る前 | Fail か Skip |
+| On Failure | ステージが失敗したとき | Rollback |
+| On Success | ステージが成功したあと | Rollback か Fail |
+
+ルールには LambdaInvoke と CloudWatchAlarm がある。CloudWatchAlarm のルールは、アラームがしきい値の内側にあれば通過する。On Success にアラームのルールを置いておくと、デプロイ直後に異常が出たときに Rollback まで進められる。
+
+### 5. 複数アカウント・複数リージョンのパイプライン
 
 クロスアカウントのパイプラインでは、成果物の受け渡しに KMS キーと IAM ロールの設定が必要になる。
 
@@ -127,8 +143,7 @@ AI/ML のアプリを評価する工程を挟むなら、Bedrock のモデル評
 
 ## 疑問・TODO
 
-- [ ] ステージ条件で設定できる失敗時の振る舞いを、具体的に確認する
-- [ ] ECR のイメージ署名で、デプロイ時の検証を組み込む手順を確認する
+- [ ] ステージ条件の Skip を使うと、後続ステージの成果物がどうなるかを確認する
 
 ## 関連ノート
 
@@ -146,3 +161,5 @@ AI/ML のアプリを評価する工程を挟むなら、Bedrock のモデル評
 - https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.md
 - https://docs.aws.amazon.com/codecommit/latest/userguide/history.md
 - https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-signing.html
+- https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-signing-verification.html
+- https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-how-it-works-conditions.html
