@@ -48,3 +48,4 @@
 - [[IaC でインフラを揃える仕組み]] — CloudFormation と CDK、Hooks・Aspects・Config・SCP で止める位置、StackSets での配布
 - [[CI-CD パイプラインと DevSecOps]] — CodePipeline・CodeBuild・CodeDeploy の分担、デプロイ戦略、署名とスキャン、クロスアカウント
 - [[オブザーバビリティの計測と通知]] — CloudWatch・X-Ray・ADOT の分担、Container Insights、クロスアカウントの集約、アラームと自動修復
+- [[運用を自動で回す道具]] — Systems Manager のランブックとパッチ適用、EventBridge Scheduler、スケーリング、自動復旧と安全装置
