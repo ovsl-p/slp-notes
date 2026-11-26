@@ -43,5 +43,5 @@
 <text x="730" y="392" font-size="10.5" fill="#4a6b4e" text-anchor="middle">各アカウントの証跡がここに集まる</text>
 <text x="40" y="420" font-size="12" fill="#333" text-anchor="start">アカウントを分ける理由は、権限・障害範囲・請求・監査の4つ。分けたうえで統制をそろえるのがガバナンス。</text>
 <text x="40" y="446" font-size="12" fill="#333" text-anchor="start">SCP が効かない相手: 管理アカウント、サービスリンクロール、組織外からのリソースベースの許可。</text>
-<text x="40" y="472" font-size="12" fill="#333" text-anchor="start">組織外からのアクセスは条件キー aws:PrincipalOrgID で弾く。</text>
+<text x="40" y="472" font-size="12" fill="#333" text-anchor="start">組織外からのアクセスは RCP か、条件キー aws:PrincipalOrgID で弾く。</text>
 </svg>

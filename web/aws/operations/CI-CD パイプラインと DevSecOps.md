@@ -4,7 +4,7 @@ aliases: [CI/CD パイプラインと DevSecOps, CodePipeline, CodeBuild, CodeDe
 domain: web
 tags: [aws, cicd, devsecops, deployment, codedeploy, sap-c03]
 created: 2026-11-25
-updated: 2026-11-25
+updated: 2026-11-26
 status: growing
 prerequisites: [コンテナの基本, IAM の基本]
 related: ["[[IaC でインフラを揃える仕組み]]", "[[マルチアカウントのガバナンス]]", "[[AI サービスの使い分け]]", "[[責任ある AI の統制]]"]
@@ -89,7 +89,7 @@ Blue/Green は、新バージョンを別環境に作ってからトラフィッ
 
 署名には AWS Signer を使う。ECR には署名の方法が2つある。マネージド署名は、署名設定と署名プロファイルを用意しておくと、プッシュ時に自動で署名される。手動署名は、レジストリへプッシュしたイメージを、ダイジェストを指定して Notation CLI と Signer のプラグインで署名する。Lambda のコード署名にも、AWS Signer が使える。
 
-検証は、動かす場所によって差し込む先が変わる。EKS は admission で、Gatekeeper と Ratify の組み合わせか Kyverno を使う。ECS はサービスのライフサイクルフックから Lambda を呼び、コンテナを起動する前に確かめる。手元で確かめるなら Notation CLI を使う。どちらの場合も、あらかじめ信頼ストアとトラストポリシーを設定しておく。
+検証は、動かす場所によって差し込む先が変わる。EKS は admission で、Gatekeeper と Ratify の組み合わせか Kyverno を使う。ECS は、CodeDeploy なら AppSpec のフック、ECS ネイティブの blue/green ならサービスのライフサイクルフックから Lambda を呼び、本番のトラフィックを切り替える前に確かめる。手元で確かめるなら Notation CLI を使う。どちらの場合も、あらかじめ信頼ストアとトラストポリシーを設定しておく。
 
 パイプラインの順序は、ビルド、検査、署名、配布である。検査を通ったものだけに署名し、デプロイ時に署名を検証すれば、未検査や未署名の成果物を本番の手前で止められる。
 
@@ -107,7 +107,7 @@ Blue/Green は、新バージョンを別環境に作ってからトラフィッ
 
 ### 5. 複数アカウント・複数リージョンのパイプライン
 
-クロスアカウントのパイプラインでは、成果物の受け渡しに KMS キーと IAM ロールの設定が必要になる。成果物を持つ S3 バケットのバケットポリシーで配布先アカウントを許可し、KMS キーはキーポリシーと配布先の IAM ポリシーの両方で復号を許可する。ロールは、信頼ポリシー（引き受ける側）と呼び出し側の sts:AssumeRole の許可を、アカウントごとに書く。
+クロスアカウントのパイプラインでは、成果物の受け渡しに KMS キーと IAM ロールの設定が必要になる。成果物を持つ S3 バケットのバケットポリシーで配布先アカウントを許可し、KMS キーはキーポリシーと配布先の IAM ポリシーの両方で復号を許可する。ロールは、信頼ポリシー（引き受けられる配布先のロール）と、パイプラインのロールの sts:AssumeRole の許可を、アカウントごとに書く。
 
 アクションが入力として受け取れる成果物は、次のどちらかに限られる。
 
@@ -127,7 +127,7 @@ Source   : GitHub（CodeConnections 経由）
 Build    : CodeBuild（コンパイル、単体テスト、イメージ作成）
 Scan     : Inspector / ECR イメージスキャン
 Sign     : AWS Signer（Notation でイメージに署名）
-Deploy   : CodeDeploy（ECS で Canary）。署名の検証は、ECS のライフサイクルフックから呼ぶ Lambda で行う
+Deploy   : CodeDeploy（ECS で Canary）。署名の検証は、CodeDeploy の AppSpec のフック（AfterAllowTestTraffic）から呼ぶ Lambda で行う
 Rollback : CloudWatch アラームで停止し、自動ロールバックを有効にしていれば戻す
 ```
 
@@ -141,7 +141,7 @@ AI/ML のアプリを評価する工程を挟むなら、Bedrock のモデル評
 - 「HalfAtATime や OneAtATime は Lambda でも選べる」は間違い。この2つは EC2/オンプレミス向けで、Lambda と ECS では AllAtOnce、Canary、Linear から選ぶ。
 - 「デプロイ設定を指定しなければ AllAtOnce になる」は間違い。EC2/オンプレミスでは、指定がなければ OneAtATime が使われる。
 - 「別の2アカウント間で成果物を直接渡せる」は間違い。成果物はパイプラインのアカウントを経由する必要があり、KMS キーと IAM ロールの設定も要る。
-- 「ECR のイメージスキャンがあれば、Inspector は不要」は間違い。基本スキャンはプッシュ時の1回だけで、継続的に見るなら拡張スキャン（中身は Inspector）か Inspector を使う。Lambda 関数も Inspector の対象になる。
+- 「ECR のイメージスキャンがあれば、Inspector は不要」は間違い。基本スキャンはプッシュ時か手動での都度実行で、継続的には見ない。継続的に見るなら拡張スキャン（中身は Inspector）か Inspector を使う。Lambda 関数も Inspector の対象になる。
 - 「CodeCommit は新規利用できない」は間違い。2024年7月25日に新規受付を終了したが、2025年11月25日に新規の提供を再開している。
 
 ## 疑問・TODO
