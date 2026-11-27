@@ -4,7 +4,7 @@ aliases: [MIDI クリップの打ち込みショートカット, Ableton MIDI �
 domain: sound-design
 tags: [ableton, live, midi, shortcut, workflow, velocity, quantize]
 created: 2026-11-26
-updated: 2026-11-26
+updated: 2026-11-28
 status: growing
 prerequisites: [Ableton Live 12 の Clip View, MIDI ノートエディタの操作]
 related: ["[[Ableton Live の操作ショートカット]]", "[[Ableton Live の視点操作ショートカット]]", "[[グラニュラーシンセの仕組み]]"]
@@ -100,7 +100,7 @@ Windows のキーで書く。Mac は Ctrl が Cmd、Alt が Option になるが�
 | グループを解除 | `Ctrl` + `Shift` + `G` |
 | MIDI ツールの設定を適用 | `Ctrl` + `Enter` |
 
-グループ化は、複数のノートで発音確率（チャンス）を1つにまとめる機能。Play All ならグループ全体が同じ確率で鳴り、Play One ならグループの中から1音だけが選ばれて鳴る。
+グループ化は、複数のノートで発音確率（チャンス）を1つにまとめる機能。Play All ならグループ全体が1つの確率でまとめて鳴るかどうかが決まり、Play One ならグループの中から1音だけが選ばれて鳴る。
 
 ### 6. グリッドと描画
 

@@ -4,7 +4,7 @@ aliases: [Ableton Live の操作ショートカット, Live 12 トランスポ�
 domain: sound-design
 tags: [ableton, live, shortcut, workflow, transport, tracks, devices, browser, comping]
 created: 2026-11-26
-updated: 2026-11-26
+updated: 2026-11-28
 status: growing
 prerequisites: [Ableton Live 12 の画面構成（Session / Arrangement / Clip / Device）]
 related: ["[[Ableton Live の視点操作ショートカット]]", "[[MIDI クリップの打ち込みショートカット]]"]
@@ -133,11 +133,11 @@ Windows のキーで書く。Mac は Ctrl が Cmd、Alt が Option になるが�
 |---|---|
 | オン / オフ | `M` |
 | オクターブを上下 | `X` / `Z` |
-| 入力ベロシティを上下 | `C` / `V` |
+| 入力ベロシティを変える | `C` / `V` |
 | MIDI マップモード | `Ctrl` + `M` |
 | キーマップモード | `Ctrl` + `K` |
 
-有効にしている間も、`Shift` を足せば単独キーのショートカットが効く。`Shift` + `S` でソロ、など。
+有効にしている間も、`Shift` を足せば単独キーのショートカットが効く。`Shift` + `S` でソロ、など。`C` / `V` のどちらが上げる側かは、公式の表に書かれていない。第三者の解説では `C` が下げ、`V` が上げるとされる。
 
 ## 具体例・コード
 
@@ -154,7 +154,7 @@ Windows のキーで書く。Mac は Ctrl が Cmd、Alt が Option になるが�
 
 ## つまずきポイント
 
-- 「`Space` はいつも最初から再生する」は間違い。選択範囲があれば、その範囲の再生になる。
+- 「`Space` はいつも最初から再生する」は間違い。アレンジメントで時間範囲を選んでいれば、その範囲の再生になる。
 - 「`Ctrl` + `Space` は停止だ」は間違い。選択範囲の終わりで止まる操作で、通常の停止は `Space`。
 - 「`Ctrl` + `G` はいつもトラックのグループ」は間違い。ノートエディタでは同時発音、デバイス画面ではデバイスのグループになる。
 - 「`Ctrl` + `B` はプロジェクト全体の書き出し」は間違い。選択範囲かトラックを音声にする操作で、全体の書き出しは `Ctrl` + `Shift` + `R`（Export Audio/Video）。
@@ -166,6 +166,7 @@ Windows のキーで書く。Mac は Ctrl が Cmd、Alt が Option になるが�
 - [ ] `Ctrl` + `Space` と `Space` の違いを、選択範囲あり / なしで実際に比べる
 - [ ] バウンスの `Ctrl` + `B` が、選択範囲とトラックでどう変わるかを確かめる
 - [ ] モーメンタリラッチの 500ms が、自分の押し方で使いやすいかを試す
+- [ ] コンピュータ MIDI キーボードの `C` / `V` で、ベロシティがどちらへ動くかを実機で確かめる
 
 ## 関連ノート
 

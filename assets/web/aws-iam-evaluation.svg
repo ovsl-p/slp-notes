@@ -42,8 +42,8 @@
 <line x1="755" y1="190" x2="700" y2="232" stroke="#5b6b7b" stroke-width="1.4" marker-end="url(#ah)"/>
 <text x="496" y="296" font-size="11" fill="#5a5a5a" text-anchor="start">片方だけでは通らない。暗号化されていれば</text>
 <text x="496" y="314" font-size="11" fill="#5a5a5a" text-anchor="start">KMS はキーポリシーと IAM ポリシーが要る。</text>
-<text x="496" y="350" font-size="11" fill="#5a5a5a" text-anchor="start">グラントで許可するなら、IAM ポリシーは要らない。</text>
-<text x="496" y="332" font-size="11" fill="#5a5a5a" text-anchor="start">SCP は呼び出し元のアカウントにだけ効く（リソース側は RCP）。</text>
+<text x="496" y="332" font-size="11" fill="#5a5a5a" text-anchor="start">グラントで許可するなら、IAM ポリシーは要らない。</text>
+<text x="496" y="350" font-size="11" fill="#5a5a5a" text-anchor="start">SCP は呼び出し元のアカウントにだけ効く（リソース側は RCP）。</text>
 <text x="40" y="404" font-size="12" fill="#333" text-anchor="start">403 が出たら、まず明示的な Deny を探し、次に上限のどこで外れたかを見る。</text>
 <text x="40" y="430" font-size="12" fill="#333" text-anchor="start">SCP・RCP・境界・セッションポリシーは、どれも「許可しない、上限を下げるだけ」で共通している。</text>
 </svg>

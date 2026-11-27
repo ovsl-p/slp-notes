@@ -4,7 +4,7 @@ aliases: [Ableton Live の視点操作ショートカット, Ableton Live ショ
 domain: sound-design
 tags: [ableton, live, shortcut, workflow, zoom, grid, tartarus]
 created: 2026-11-26
-updated: 2026-11-26
+updated: 2026-11-28
 status: growing
 prerequisites: [Ableton Live 12 の画面構成（Session / Arrangement / Clip / Device）]
 related: ["[[Ableton Live の操作ショートカット]]", "[[MIDI クリップの打ち込みショートカット]]", "[[グラニュラーシンセの仕組み]]"]
@@ -61,7 +61,7 @@ Windows のキーで書く。Mac は Ctrl が Cmd、Alt が Option になるが�
 | 左右スクロール | `Shift` + スクロール |
 | 選択範囲の左右へパン | `Ctrl` + `Alt` + ドラッグ |
 
-追従は、編集やスクロールをすると一時停止する。再生を止めるか、再生し直すと自動で戻る。`Ctrl` + `Shift` + `F` は追従のオン / オフを切り替えるキーなので、止めたいときだけ押す。公式の表は節によって Windows のキーが `Alt` + `Shift` + `F` と `Ctrl` + `Shift` + `F` に分かれる（Mac はどちらも `Option` + `Shift` + `F`）。ノートエディタやブラウザでは、同じ `Ctrl` + `Shift` + `F` がノートフィルタや類似ファイル検索になる（[[MIDI クリップの打ち込みショートカット]] §7）。
+追従は、編集やスクロールをすると一時停止する。再生を止めるか、再生し直すと自動で戻る。`Ctrl` + `Shift` + `F` は追従のオン / オフを切り替えるキーなので、止めたいときだけ押す。公式の表は節によって Windows のキーが `Alt` + `Shift` + `F` と `Ctrl` + `Shift` + `F` に分かれる（Mac はどちらも `Option` + `Shift` + `F`）。ノートエディタやブラウザでは、同じ `Ctrl` + `Shift` + `F` がノートフィルタや類似ファイル検索になる（ノートフィルタは [[MIDI クリップの打ち込みショートカット]] §7、類似ファイル検索は [[Ableton Live の操作ショートカット]] §4）。
 
 ### 3. 画面の切替
 
