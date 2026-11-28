@@ -4,12 +4,14 @@ aliases: [Ableton Live の操作ショートカット, Live 12 トランスポ�
 domain: sound-design
 tags: [ableton, live, shortcut, workflow, transport, tracks, devices, browser, comping]
 created: 2026-11-26
-updated: 2026-11-28
+updated: 2026-11-29
 status: growing
 prerequisites: [Ableton Live 12 の画面構成（Session / Arrangement / Clip / Device）]
 related: ["[[Ableton Live の視点操作ショートカット]]", "[[MIDI クリップの打ち込みショートカット]]"]
 sources:
   - https://www.ableton.com/en/live-manual/12/live-keyboard-shortcuts/
+  - https://www.ableton.com/en/live-manual/12/routing-and-i-o/
+  - https://schoolofsynthesis.com/playing-notes-from-your-computer-keyboard-in-ableton-live/
 ---
 
 # Ableton Live の操作ショートカット
@@ -137,7 +139,7 @@ Windows のキーで書く。Mac は Ctrl が Cmd、Alt が Option になるが�
 | MIDI マップモード | `Ctrl` + `M` |
 | キーマップモード | `Ctrl` + `K` |
 
-有効にしている間も、`Shift` を足せば単独キーのショートカットが効く。`Shift` + `S` でソロ、など。`C` / `V` のどちらが上げる側かは、公式の表に書かれていない。第三者の解説では `C` が下げ、`V` が上げるとされる。
+有効にしている間も、`Shift` を足せば単独キーのショートカットが効く。`Shift` + `S` でソロ、など。`C` と `V` は入力ベロシティを20刻みで上下させる。どちらが上げる側かは、公式マニュアルのショートカット表（42.24）にも本文（17.3.2）にも書かれていない。School of Synthesis の解説では `C` が下げ、`V` が上げるとされる。
 
 ## 具体例・コード
 
@@ -176,3 +178,5 @@ Windows のキーで書く。Mac は Ctrl が Cmd、Alt が Option になるが�
 ## 出典
 
 - https://www.ableton.com/en/live-manual/12/live-keyboard-shortcuts/
+- https://www.ableton.com/en/live-manual/12/routing-and-i-o/
+- https://schoolofsynthesis.com/playing-notes-from-your-computer-keyboard-in-ableton-live/
